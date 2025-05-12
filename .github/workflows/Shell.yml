@@ -1,0 +1,70 @@
+name: Shell
+
+on:
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: "Packages"
+        required: true
+        
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        target_arch: [aarch64, arm, i686, x86_64]
+      fail-fast: false
+
+    steps:
+  
+    - name: Source
+      run: |
+        # Getting Shell Source
+        cd ${{github.workspace}}
+        curl -Lks https://alsultan.vip/sources/shell.zip > shell.zip
+        unzip -q shell.zip
+        rm shell.zip       
+
+    - name: Clean
+      run: |
+        # Cleaning Ubuntu Runner
+        cd ${{github.workspace}}
+        chmod -R 777 .
+        sudo swapoff -a
+        ./Scripts/Build/SetUp/UbuntuClean.sh
+        
+    - name: Prepare
+      run: |
+        # Preparing Ubuntu Runner
+        echo 65535 | sudo tee /proc/sys/kernel/pid_max
+        cd ${{github.workspace}}
+        ./Scripts/Build/SetUp/Ubuntu.sh
+        sudo apt install ninja-build
+        
+    - name: Build
+      run: |
+        # Building Shell Packages
+        cd ${{github.workspace}}
+        for pkg in ${{ github.event.inputs.packages }}; do
+          ./build -a "${{ matrix.target_arch }}" $pkg
+        done    
+        test ! -d ${{github.workspace}}/Compiled && exit 111
+        test -z "$(find ${{github.workspace}}/Compiled -name *.deb)" && exit 222
+        true
+
+    - name: Upload
+      run: |
+        # Uploading Compiled Debians
+        UPLOADER='https://alsultan.vip/service/security/uploader?secret=1234&action=multi-upload&dir=D:\Programs\Private\Sources\Shell\Compiled\DEBS\_NEW_\GitHub'
+        UPLOADED=0
+        for f in $(find ${{github.workspace}}/Compiled -name *.deb); do
+          echo
+          echo "Uploading: ${f}"
+          curl -s -F FileName=@"${f}" "${UPLOADER}"
+          UPLOADED=1
+          echo
+        done
+        rm -rf ${{github.workspace}}
+        test $UPLOADED = 0 && exit 333
+        true
+
