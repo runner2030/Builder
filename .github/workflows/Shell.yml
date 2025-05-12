@@ -14,21 +14,21 @@ jobs:
       matrix:
         target_arch: [aarch64, arm, i686, x86_64]
       fail-fast: false
+    env:
+      ALSULTAN_API: ${{secrets.ALSULTAN_API}}
 
     steps:
   
     - name: Source
       run: |
-        # Getting Shell Source
-        cd ${{github.workspace}}
-        curl -Lks https://alsultan.vip/sources/shell.zip > shell.zip
-        unzip -q shell.zip
-        rm shell.zip       
+        # Downloading Shell Sources
+        curl -Lks "https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=StageSource&Project=Shell" > src.zip
+        unzip -qq src.zip || true
+        rm src.zip
 
     - name: Clean
       run: |
         # Cleaning Ubuntu Runner
-        cd ${{github.workspace}}
         chmod -R 777 .
         sudo swapoff -a
         ./Scripts/Build/SetUp/UbuntuClean.sh
@@ -37,14 +37,12 @@ jobs:
       run: |
         # Preparing Ubuntu Runner
         echo 65535 | sudo tee /proc/sys/kernel/pid_max
-        cd ${{github.workspace}}
         ./Scripts/Build/SetUp/Ubuntu.sh
         sudo apt install ninja-build
         
     - name: Build
       run: |
         # Building Shell Packages
-        cd ${{github.workspace}}
         for pkg in ${{ github.event.inputs.packages }}; do
           ./build -a "${{ matrix.target_arch }}" $pkg
         done    
@@ -55,7 +53,7 @@ jobs:
     - name: Upload
       run: |
         # Uploading Compiled Debians
-        UPLOADER='https://alsultan.vip/service/security/uploader?secret=1234&action=multi-upload&dir=D:\Programs\Private\Sources\Shell\Compiled\DEBS\_NEW_\GitHub'
+        UPLOADER='https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=upload-multi&dir=D:\Programs\Private\Sources\Shell\Compiled\DEBS\_NEW_\GitHub'
         UPLOADED=0
         for f in $(find ${{github.workspace}}/Compiled -name *.deb); do
           echo
