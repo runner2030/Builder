@@ -44,10 +44,10 @@ jobs:
         ./build-package.sh ${{matrix.arch}} ${{github.event.inputs.package}}
         if [ -f ${{github.workspace}}/excluded-${{github.event.inputs.package}}-${{matrix.arch}} ]; then
             echo "skip-upload=true" >> $GITHUB_OUTPUT
-         else
+        else
             test ! -d ${{github.workspace}}/Compiled && exit 111
             test -z "$(find ${{github.workspace}}/Compiled -name *.deb)" && exit 222
-         fi         
+        fi         
 
     - name: Upload
       if: ${{steps.build.outputs.skip-upload != 'true' }}
@@ -100,10 +100,10 @@ jobs:
         ./build-package.sh ${{matrix.arch}} ${{github.event.inputs.package}}
         if [ -f ${{github.workspace}}/excluded-${{github.event.inputs.package}}-${{matrix.arch}} ]; then
             echo "skip-upload=true" >> $GITHUB_OUTPUT
-         else
+        else
             test ! -d ${{github.workspace}}/Compiled && exit 111
             test -z "$(find ${{github.workspace}}/Compiled -name *.deb)" && exit 222
-         fi
+        fi
 
     - name: Upload
       if: ${{steps.build.outputs.skip-upload != 'true' }}
