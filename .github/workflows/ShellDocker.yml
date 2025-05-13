@@ -45,6 +45,7 @@ jobs:
     - name: Upload
       run: |
         # Uploading Compiled Debians
+        test -f /tmp/excluded-${{github.event.inputs.package}}-${{matrix.arch}} && exit 0
         UPLOADER='https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=upload-multi&dir=D:\Programs\Private\Sources\Shell\Compiled\DEBS\_NEW_\GitHub'
         UPLOADED=0
         for f in $(find ${{github.workspace}}/Compiled -name *.deb); do
@@ -93,6 +94,7 @@ jobs:
     - name: Upload
       run: |
         # Uploading Compiled Debians
+        test -f /tmp/excluded-${{github.event.inputs.package}}-${{matrix.arch}} && exit 0
         UPLOADER='https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=upload-multi&dir=D:\Programs\Private\Sources\Shell\Compiled\DEBS\_NEW_\GitHub'
         UPLOADED=0
         for f in $(find ${{github.workspace}}/Compiled -name *.deb); do
