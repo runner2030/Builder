@@ -29,14 +29,11 @@ jobs:
        
     - name: Docker
       run: |
-        # Building Docker Container
-        chmod -R 777 .
-        cd Scripts/Build/Docker
+        true
         
     - name: Build
       run: |
         # Building Shell Package
-        cd Scripts/Build/Docker
         echo "skip-upload=true" >> $GITHUB_OUTPUT
 
     - name: Upload
