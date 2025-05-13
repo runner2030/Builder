@@ -10,7 +10,7 @@ on:
 jobs:
 
   build:
-    name: ${{github.event.inputs.package}}
+    name: ${{ inputs.environment }}
     runs-on: ubuntu-24.04-arm
     strategy:
       matrix:
