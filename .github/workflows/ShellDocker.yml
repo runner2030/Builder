@@ -9,69 +9,13 @@ on:
         required: true
         
 jobs:
-
-  Build_ARM:
-    name: ${{inputs.package}} (${{matrix.arch}})
-    runs-on: ubuntu-24.04-arm
-    strategy:
-      matrix:
-        arch: [aarch64, arm]
-      fail-fast: false
-    env:
-      ALSULTAN_API: ${{secrets.ALSULTAN_API}}
-      
-    steps:
-  
-    - name: Source
-      run: |
-        # Downloading Shell Sources
-        curl -Lks "https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=StageSource&Project=Shell" > src.zip
-        unzip -qq src.zip || true        
-        rm src.zip
-       
-    - name: Docker
-      run: |
-        # Building Docker Container
-        chmod -R 777 .
-        cd Scripts/Build/Docker
-        ./docker-build.sh ${{matrix.arch}}
-        
-    - name: Build
-      id: build
-      run: |
-        # Building Shell Package
-        cd Scripts/Build/Docker
-        ./build-package.sh ${{matrix.arch}} ${{github.event.inputs.package}}
-        if [ -f ${{github.workspace}}/excluded-${{github.event.inputs.package}}-${{matrix.arch}} ]; then
-            echo "skip-upload=true" >> $GITHUB_OUTPUT
-         else
-            test ! -d ${{github.workspace}}/Compiled && exit 111
-            test -z "$(find ${{github.workspace}}/Compiled -name *.deb)" && exit 222
-         fi         
-
-    - name: Upload
-      if: ${{steps.build.outputs.skip-upload != 'true' }}
-      run: |
-        # Uploading Compiled Debians
-        UPLOADER='https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=upload-multi&dir=D:\Programs\Private\Sources\Shell\Compiled\DEBS\_NEW_\GitHub'
-        UPLOADED=0
-        for f in $(find ${{github.workspace}}/Compiled -name *.deb); do
-          echo
-          echo "Uploading: ${f}"
-          curl -s -F FileName=@"${f}" "${UPLOADER}"
-          UPLOADED=1
-          echo
-        done
-        rm -rf ${{github.workspace}} 2> /dev/null || true
-        test $UPLOADED = 0 && exit 333 || true
-
-
+ 
   Build_X86:
     name: ${{inputs.package}} (${{matrix.arch}})
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        arch: [i686, x86_64]
+        arch: [i686]
       fail-fast: false
     env:
       ALSULTAN_API: ${{secrets.ALSULTAN_API}}
@@ -81,41 +25,21 @@ jobs:
     - name: Source
       run: |
         # Downloading Shell Sources
-        curl -Lks "https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=StageSource&Project=Shell" > src.zip
-        unzip -qq src.zip || true        
-        rm src.zip
+        true
        
     - name: Docker
       run: |
         # Building Docker Container
         chmod -R 777 .
         cd Scripts/Build/Docker
-        ./docker-build.sh ${{matrix.arch}}
         
     - name: Build
       run: |
         # Building Shell Package
         cd Scripts/Build/Docker
-        ./build-package.sh ${{matrix.arch}} ${{github.event.inputs.package}}
-        if [ -f ${{github.workspace}}/excluded-${{github.event.inputs.package}}-${{matrix.arch}} ]; then
-            echo "skip-upload=true" >> $GITHUB_OUTPUT
-         else
-            test ! -d ${{github.workspace}}/Compiled && exit 111
-            test -z "$(find ${{github.workspace}}/Compiled -name *.deb)" && exit 222
-         fi
+        echo "skip-upload=true" >> $GITHUB_OUTPUT
 
     - name: Upload
       if: ${{steps.build-info.outputs.skip-upload != 'true' }}
       run: |
-        # Uploading Compiled Debians
-        UPLOADER='https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=upload-multi&dir=D:\Programs\Private\Sources\Shell\Compiled\DEBS\_NEW_\GitHub'
-        UPLOADED=0
-        for f in $(find ${{github.workspace}}/Compiled -name *.deb); do
-          echo
-          echo "Uploading: ${f}"
-          curl -s -F FileName=@"${f}" "${UPLOADER}"
-          UPLOADED=1
-          echo
-        done
-        rm -rf ${{github.workspace}} 2> /dev/null || true
-        test $UPLOADED = 0 && exit 333 || true
+         echo ${{steps.build-info.outputs.skip-upload}}
