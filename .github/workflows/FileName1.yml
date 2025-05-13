@@ -1,4 +1,5 @@
 name: FileName1
+run-name: Build [${{inputs.packages}}]
 
 on:
   workflow_dispatch:
