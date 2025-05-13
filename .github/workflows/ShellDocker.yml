@@ -41,11 +41,11 @@ jobs:
         # Building Shell Package
         cd Scripts/Build/Docker
         ./build-package.sh ${{matrix.arch}} ${{github.event.inputs.package}}
-         if [ -f $PWD/../../../excluded-${ALSULTAN_PKG}-${ALSULTAN_ARCH} ]; then
+         if [ -f ${{github.workspace}}/excluded-${ALSULTAN_PKG}-${ALSULTAN_ARCH} ]; then
             echo "skip-upload=true" >> $GITHUB_OUTPUT
          else
-            test ! -d $PWD/../../../Compiled && exit 111
-            test -z "$(find $PWD/../../../Compiled -name *.deb)" && exit 222
+            test ! -d ${{github.workspace}}/Compiled && exit 111
+            test -z "$(find ${{github.workspace}}/Compiled -name *.deb)" && exit 222
          fi         
 
     - name: Upload
@@ -96,11 +96,11 @@ jobs:
         # Building Shell Package
         cd Scripts/Build/Docker
         ./build-package.sh ${{matrix.arch}} ${{github.event.inputs.package}}
-        if [ -f $PWD/../../../excluded-${ALSULTAN_PKG}-${ALSULTAN_ARCH} ]; then
+        if [ -f ${{github.workspace}}/excluded-${ALSULTAN_PKG}-${ALSULTAN_ARCH} ]; then
             echo "skip-upload=true" >> $GITHUB_OUTPUT
          else
-            test ! -d $PWD/../../../Compiled && exit 111
-            test -z "$(find $PWD/../../../Compiled -name *.deb)" && exit 222
+            test ! -d ${{github.workspace}}/Compiled && exit 111
+            test -z "$(find ${{github.workspace}}/Compiled -name *.deb)" && exit 222
          fi
 
     - name: Upload
