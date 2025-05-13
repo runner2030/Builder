@@ -8,12 +8,61 @@ on:
         required: true
         
 jobs:
- 
-  Build_x86:
-    runs-on: ubuntu-latest
+
+  Build_ARM:
+    runs-on: ubuntu-24.04-arm
     strategy:
       matrix:
-        arch: [i686]
+        arch: [aarch64, arm]
+      fail-fast: false
+    env:
+      ALSULTAN_API: ${{secrets.ALSULTAN_API}}
+      
+    steps:
+  
+    - name: Source
+      run: |
+        # Downloading Shell Sources
+        curl -Lks "https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=StageSource&Project=Shell" > src.zip
+        unzip -qq src.zip || true        
+        rm src.zip
+       
+    - name: Docker
+      run: |
+        # Building Docker Container
+        chmod -R 777 .
+        cd Scripts/Build/Docker
+        ./docker-build.sh ${{matrix.arch}}
+        
+    - name: Build
+      run: |
+        # Building Shell Packages
+        cd Scripts/Build/Docker
+        for pkg in ${{ github.event.inputs.packages }}; do
+          ./build-package.sh ${{matrix.arch}} $pkg
+        done    
+
+    - name: Upload
+      run: |
+        # Uploading Compiled Debians
+        UPLOADER='https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=upload-multi&dir=D:\Programs\Private\Sources\Shell\Compiled\DEBS\_NEW_\GitHub'
+        UPLOADED=0
+        for f in $(find ${{github.workspace}}/Compiled -name *.deb); do
+          echo
+          echo "Uploading: ${f}"
+          curl -s -F FileName=@"${f}" "${UPLOADER}"
+          UPLOADED=1
+          echo
+        done
+        rm -rf ${{github.workspace}} 2> /dev/null || true
+        test $UPLOADED = 0 && exit 333 || true
+
+
+  Build_X86:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        arch: [i686, x86_64]
       fail-fast: false
     env:
       ALSULTAN_API: ${{secrets.ALSULTAN_API}}
@@ -41,7 +90,7 @@ jobs:
         for pkg in ${{ github.event.inputs.packages }}; do
           ./build-package.sh ${{matrix.arch}} $pkg
         done    
-        
+
     - name: Upload
       run: |
         # Uploading Compiled Debians
@@ -54,7 +103,5 @@ jobs:
           UPLOADED=1
           echo
         done
-        rm -rf ${{github.workspace}}
-        test $UPLOADED = 0 && exit 333
-        true
-     
+        rm -rf ${{github.workspace}} 2> /dev/null || true
+        test $UPLOADED = 0 && exit 333 || true
