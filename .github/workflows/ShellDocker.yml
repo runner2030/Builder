@@ -41,11 +41,17 @@ jobs:
         # Building Shell Package
         cd Scripts/Build/Docker
         ./build-package.sh ${{matrix.arch}} ${{github.event.inputs.package}}
-         
+         if [ -f $PWD/../../../excluded-${ALSULTAN_PKG}-${ALSULTAN_ARCH} ]; then
+            echo "skip-upload=true" >> $GITHUB_OUTPUT
+         else
+            test ! -d $PWD/../../../Compiled && exit 111
+            test -z "$(find $PWD/../../../Compiled -name *.deb)" && exit 222
+         fi         
+
     - name: Upload
+      if: ${{steps.build-info.outputs.skip-upload != 'true' }}
       run: |
         # Uploading Compiled Debians
-        test -f ${{github.workspace}}/excluded-${{github.event.inputs.package}}-${{matrix.arch}} && exit 0
         UPLOADER='https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=upload-multi&dir=D:\Programs\Private\Sources\Shell\Compiled\DEBS\_NEW_\GitHub'
         UPLOADED=0
         for f in $(find ${{github.workspace}}/Compiled -name *.deb); do
@@ -90,11 +96,17 @@ jobs:
         # Building Shell Package
         cd Scripts/Build/Docker
         ./build-package.sh ${{matrix.arch}} ${{github.event.inputs.package}}
+        if [ -f $PWD/../../../excluded-${ALSULTAN_PKG}-${ALSULTAN_ARCH} ]; then
+            echo "skip-upload=true" >> $GITHUB_OUTPUT
+         else
+            test ! -d $PWD/../../../Compiled && exit 111
+            test -z "$(find $PWD/../../../Compiled -name *.deb)" && exit 222
+         fi
 
     - name: Upload
+      if: ${{steps.build-info.outputs.skip-upload != 'true' }}
       run: |
         # Uploading Compiled Debians
-        test -f ${{github.workspace}}/excluded-${{github.event.inputs.package}}-${{matrix.arch}} && exit 0
         UPLOADER='https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=upload-multi&dir=D:\Programs\Private\Sources\Shell\Compiled\DEBS\_NEW_\GitHub'
         UPLOADED=0
         for f in $(find ${{github.workspace}}/Compiled -name *.deb); do
