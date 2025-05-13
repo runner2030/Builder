@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        arch: [i686, x86_64]
+        arch: [x86_64, i686]
       fail-fast: false
     env:
       ALSULTAN_API: ${{secrets.ALSULTAN_API}}
@@ -23,15 +23,15 @@ jobs:
       run: |
         # Downloading Shell Sources
         curl -Lks "https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=StageSource&Project=Shell" > src.zip
-        unzip -qq src.zip || true
-        
+        unzip -qq src.zip || true        
         rm src.zip
        
     - name: Docker
       run: |
         # Building Docker Container
         chmod -R 777 .
-        ./Scripts/Build/Docker/docker-build.sh ${{matrix.arch}}
+        cd Scripts/Build/Docker
+        ./docker-build.sh ${{matrix.arch}}
         
     - name: Build
       run: |
