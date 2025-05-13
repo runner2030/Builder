@@ -1,4 +1,4 @@
-name: ShellDocker
+name: FileName1
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ on:
 jobs:
 
   build:
-    name: ${{ inputs.environment }}
+    name: ${{ inputs.packages }}
     runs-on: ubuntu-24.04-arm
     strategy:
       matrix:
