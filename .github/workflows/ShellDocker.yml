@@ -30,7 +30,6 @@ jobs:
         rm src.zip
        
     - name: Docker
-      needs: Source
       run: |
         # Building Docker Container
         chmod -R 777 .
@@ -38,7 +37,6 @@ jobs:
         ./docker-build.sh ${{matrix.arch}}
         
     - name: Build
-      needs: Docker
       run: |
         # Building Shell Package
         cd Scripts/Build/Docker
@@ -51,7 +49,6 @@ jobs:
          fi         
 
     - name: Upload
-      needs: Build
       if: ${{steps.build-info.outputs.skip-upload != 'true' }}
       run: |
         # Uploading Compiled Debians
@@ -88,7 +85,6 @@ jobs:
         rm src.zip
        
     - name: Docker
-      needs: Source
       run: |
         # Building Docker Container
         chmod -R 777 .
@@ -96,7 +92,6 @@ jobs:
         ./docker-build.sh ${{matrix.arch}}
         
     - name: Build
-      needs: Docker
       run: |
         # Building Shell Package
         cd Scripts/Build/Docker
@@ -109,7 +104,6 @@ jobs:
          fi
 
     - name: Upload
-      needs: Build
       if: ${{steps.build-info.outputs.skip-upload != 'true' }}
       run: |
         # Uploading Compiled Debians
