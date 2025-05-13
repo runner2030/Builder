@@ -1,0 +1,24 @@
+name: ShellDocker
+
+on:
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: "Packages"
+        required: true
+        
+jobs:
+
+  build:
+    name: this is new name
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      matrix:
+        arch: [aarch64, arm]
+      fail-fast: false
+      
+    steps:
+  
+    - name: Source
+      run: echo 123
+        
