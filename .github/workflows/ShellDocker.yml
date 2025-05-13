@@ -1,0 +1,43 @@
+name: ShellDocker
+
+on:
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: "Packages"
+        required: true
+        
+jobs:
+  Build_x86:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [i686, x86_64]
+      fail-fast: false
+    env:
+      ALSULTAN_API: ${{secrets.ALSULTAN_API}}
+
+    steps:
+  
+    - name: Source
+      run: |
+        # Downloading Shell Sources
+        curl -Lks "https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=StageSource&Project=Shell" > src.zip
+        unzip -qq src.zip || true
+        
+        rm src.zip
+       
+    - name: Docker
+      run: |
+        # Building Docker Container
+        chmod -R 777 .
+        ./Scripts/Build/Docker/docker-build.sh ${{matrix.arch}}
+        
+    - name: Build
+      run: |
+        # Building Shell Packages
+        for pkg in ${{ github.event.inputs.packages }}; do
+          ./Scripts/Build/Docker/build-package.sh ${{matrix.arch}} $pkg
+        done    
+
+     
