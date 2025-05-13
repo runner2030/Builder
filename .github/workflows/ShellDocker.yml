@@ -42,7 +42,7 @@ jobs:
         cd Scripts/Build/Docker
         ./build-package.sh ${{matrix.arch}} ${{github.event.inputs.package}}
         ls -la ${{github.workspace}}
-        if [ -f /Shell/excluded-${ALSULTAN_PKG}-${ALSULTAN_ARCH} ]; then
+        if [ -f ${{github.workspace}}/excluded-${{github.event.inputs.package}}-${{matrix.arch}} ]; then
             echo "skip-upload=true" >> $GITHUB_OUTPUT
          else
             test ! -d /Shell/Compiled && exit 111
