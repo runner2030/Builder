@@ -32,11 +32,12 @@ jobs:
         true
         
     - name: Build
+      id: build
       run: |
         # Building Shell Package
         echo "skip-upload=true" >> $GITHUB_OUTPUT
 
     - name: Upload
-      if: ${{steps.build-info.outputs.skip-upload != 'true' }}
+      if: ${{steps.build.outputs.skip-upload != 'true' }}
       run: |
-         echo ${{steps.build-info.outputs.skip-upload}}
+         echo ${{steps.build.outputs.skip-upload}}
