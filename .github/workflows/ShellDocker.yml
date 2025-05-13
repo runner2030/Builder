@@ -36,8 +36,9 @@ jobs:
     - name: Build
       run: |
         # Building Shell Packages
+        cd Scripts/Build/Docker
         for pkg in ${{ github.event.inputs.packages }}; do
-          ./Scripts/Build/Docker/build-package.sh ${{matrix.arch}} $pkg
+          ./build-package.sh ${{matrix.arch}} $pkg
         done    
 
      
