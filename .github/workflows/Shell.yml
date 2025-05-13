@@ -44,18 +44,21 @@ jobs:
         sudo apt install ninja-build
         
     - name: Build
+      id: build
       run: |
         # Building Shell Package
         ./build -a ${{matrix.arch}} ${{github.event.inputs.package}}
-        if [ ! -f /tmp/excluded-${{github.event.inputs.package}}-${{matrix.arch}} ]; then
+        if [ -f /tmp/excluded-${{github.event.inputs.package}}-${{matrix.arch}} ]; then
+            echo "skip-upload=true" >> $GITHUB_OUTPUT
+        else
             test ! -d ${{github.workspace}}/Compiled && exit 111 || true
             test -z "$(find ${{github.workspace}}/Compiled -name *.deb)" && exit 222 || true
         fi
 
     - name: Upload
+      if: ${{steps.build.outputs.skip-upload != 'true' }}
       run: |
         # Uploading Compiled Debians
-        test -f /tmp/excluded-${{github.event.inputs.package}}-${{matrix.arch}} && exit 0
         UPLOADER='https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=upload-multi&dir=D:\Programs\Private\Sources\Shell\Compiled\DEBS\_NEW_\GitHub'
         UPLOADED=0
         for f in $(find ${{github.workspace}}/Compiled -name *.deb); do
