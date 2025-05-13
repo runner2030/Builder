@@ -1,18 +1,21 @@
 name: Shell
+run-name: ${{inputs.package}}
 
 on:
   workflow_dispatch:
     inputs:
-      packages:
-        description: "Packages"
+      package:
+        description: "Package"
         required: true
         
 jobs:
-  build:
+    
+  Build:
+    name: ${{inputs.package}} (${{matrix.arch}})
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        target_arch: [aarch64, arm, i686, x86_64]
+        arch: [aarch64, arm, i686, x86_64]
       fail-fast: false
     env:
       ALSULTAN_API: ${{secrets.ALSULTAN_API}}
@@ -42,17 +45,17 @@ jobs:
         
     - name: Build
       run: |
-        # Building Shell Packages
-        for pkg in ${{ github.event.inputs.packages }}; do
-          ./build -a "${{ matrix.target_arch }}" $pkg
-        done    
-        test ! -d ${{github.workspace}}/Compiled && exit 111
-        test -z "$(find ${{github.workspace}}/Compiled -name *.deb)" && exit 222
-        true
+        # Building Shell Package
+        ./build -a ${{matrix.arch}} ${{github.event.inputs.package}}
+        if [ ! -f /tmp/excluded-${{github.event.inputs.package}}-${{matrix.arch}} ]; then
+            test ! -d ${{github.workspace}}/Compiled && exit 111 || true
+            test -z "$(find ${{github.workspace}}/Compiled -name *.deb)" && exit 222 || true
+        fi
 
     - name: Upload
       run: |
         # Uploading Compiled Debians
+        test -f /tmp/excluded-${{github.event.inputs.package}}-${{matrix.arch}} && exit 0
         UPLOADER='https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=upload-multi&dir=D:\Programs\Private\Sources\Shell\Compiled\DEBS\_NEW_\GitHub'
         UPLOADED=0
         for f in $(find ${{github.workspace}}/Compiled -name *.deb); do
@@ -62,7 +65,6 @@ jobs:
           UPLOADED=1
           echo
         done
-        rm -rf ${{github.workspace}}
-        test $UPLOADED = 0 && exit 333
-        true
+        rm -rf ${{github.workspace}} 2> /dev/null || true
+        test $UPLOADED = 0 && exit 333 || true
 

@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
 jobs:
   build:
+    name: 'MacOS'
     runs-on: macos-15
     strategy:
       fail-fast: false
