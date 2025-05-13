@@ -41,5 +41,20 @@ jobs:
         for pkg in ${{ github.event.inputs.packages }}; do
           ./build-package.sh ${{matrix.arch}} $pkg
         done    
-
+        
+    - name: Upload
+      run: |
+        # Uploading Compiled Debians
+        UPLOADER='https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=upload-multi&dir=D:\Programs\Private\Sources\Shell\Compiled\DEBS\_NEW_\GitHub'
+        UPLOADED=0
+        for f in $(find ${{github.workspace}}/Compiled -name *.deb); do
+          echo
+          echo "Uploading: ${f}"
+          curl -s -F FileName=@"${f}" "${UPLOADER}"
+          UPLOADED=1
+          echo
+        done
+        rm -rf ${{github.workspace}}
+        test $UPLOADED = 0 && exit 333
+        true
      
