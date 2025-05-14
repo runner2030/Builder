@@ -3,18 +3,20 @@ on:
   workflow_dispatch:
 jobs:
   build:
-    name: ${{matrix.arch}}
+    name: ${{matrix.NAME}}
     runs-on: macos-15
     strategy:
       fail-fast: false
       matrix:
         include:
         
-          - PLATFORM: ios
+          - NAME: iOS
+            PLATFORM: ios
             FRAMEWORK: ios
             PROFILE: NitaqPos,
             
-          - PLATFORM: macos
+          - NAME: MacOS
+            PLATFORM: macos
             FRAMEWORK: maccatalyst
             PROFILE: NitaqPosMac,
 
@@ -23,6 +25,7 @@ jobs:
     
     - name: Source 
       run: |
+        echo NAME=${{matrix.NAME}}
         echo PLATFORM=${{matrix.PLATFORM}}
         echo FRAMEWORK=${{matrix.FRAMEWORK}}
         echo PROFILE=${{matrix.PROFILE}}
