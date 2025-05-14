@@ -8,11 +8,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch1: [ios, macos]
-        arch2: [iphone, ipad]
+        include:
+          - cpp_compiler: g++
+            c_compiler: gcc,
+          - cpp_compiler: g++-8
+            c_compiler: gcc-8
+          - cpp_compiler: clang++
+            c_compiler: clang
     env:
-      ALSULTAN_1: ${{matrix.arch1}}
-      ALSULTAN_2: ${{matrix.arch2}}
+      ALSULTAN_1: ${{matrix.cpp_compiler}}
+      ALSULTAN_2: ${{matrix.c_compiler}}
 
 
     steps:
