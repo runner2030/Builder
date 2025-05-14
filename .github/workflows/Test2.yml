@@ -13,7 +13,5 @@ jobs:
   
     - name: S1
       run: |
-        du -sh ~/.cargo || true
-        du -sh ./target || true
-        du -sh ~/.rustup || true
+        dpkg-query -Wf '${Installed-Size}K\t${Package}\n' | sort -nr | head -10 | numfmt --from=auto --to=si
 
