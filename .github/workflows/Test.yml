@@ -20,7 +20,7 @@ jobs:
           
           TMP_FOLDER=/tmp/put_here_to_remove/
           
-          sudo mkdir -o $TMP_FOLDER
+          sudo mkdir -p $TMP_FOLDER
           
           sudo mv -v /opt/ghc  						      $TMP_FOLDER
           sudo mv -v /opt/hostedtoolcache                   $TMP_FOLDER
