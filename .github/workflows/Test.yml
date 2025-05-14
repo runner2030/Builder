@@ -13,20 +13,20 @@ jobs:
    
     - name: S1
       run: |
-       echo -e "\nRemoving Large System Packages (Free `df -h . | tail -1 | awk '{print $4}'`)\n"
-       sudo apt-get -yq purge $(dpkg -l | grep '^ii' | awk '{ print $2 }' | grep -P '(mecab|azure|aspnetcore|liblldb-|netstandard|clang|gfortran|mysql|google|postgresql|cabal|dotnet|ghc|mongodb|libmono|llvm|kubectl|podman|ruby3|mercurial|git-lfs|skopeo|buildah|vim|nano|python3-botocore|powershell|shellcheck|firefox|microsoft-edge)') || true
+       echo -e "\n\n\nRemoving Large System Packages (Free `df -h . | tail -1 | awk '{print $4}'`)\n"
+       sudo apt-get -yq purge $(dpkg -l | grep '^ii' | awk '{ print $2 }' | grep -P '(mecab|azure|aspnetcore|liblldb-|netstandard|clang|gfortran|mysql|google|postgresql|cabal|dotnet|ghc|mongodb|libmono|llvm|kubectl|podman|ruby3|mercurial|git-lfs|skopeo|buildah|vim|nano|python3-botocore|powershell|shellcheck|firefox|microsoft-edge|temurin-21-jdk|temurin-11-jdk|temurin-8-jdk|snapd|gcc-12|gcc-13|gcc-14|g++-14|docker-ce-cli)') || true
        
-       echo -e "\nRemoving Docker Containers (Free `df -h . | tail -1 | awk '{print $4}'`)\n"
+       echo -e "\n\n\nRemoving Docker Containers (Free `df -h . | tail -1 | awk '{print $4}'`)\n"
        sudo docker image prune --all --force
        sudo docker builder prune -a
        sudo apt-get -yqq purge containerd.io
        
-       echo -e "\nCleaning Up System Packages (Free `df -h . | tail -1 | awk '{print $4}'`)\n"
+       echo -e "\n\n\nCleaning Up System Packages (Free `df -h . | tail -1 | awk '{print $4}'`)\n"
        sudo apt-get -yqq autoremove
        sudo apt-get -yqq clean
        
        
-       echo -e "\nMoving Trash Folders To Temp (Free `df -h . | tail -1 | awk '{print $4}'`)\n"
+       echo -e "\n\n\nMoving Trash Folders To Temp (Free `df -h . | tail -1 | awk '{print $4}'`)\n"
        TMP_FOLDER=/tmp/put_here_to_remove/
        
        sudo mkdir -p $TMP_FOLDER
@@ -49,14 +49,14 @@ jobs:
        sudo mv -v /usr/lib/dotnet                        $TMP_FOLDER 2>/dev/null || true
        sudo mv -v "$AGENT_TOOLSDIRECTORY"                $TMP_FOLDER 2>/dev/null || true
        
-       echo -e "\nMaking 12G Swap File (Free `df -h . | tail -1 | awk '{print $4}'`)\n"
+       echo -e "\n\n\nMaking 12G Swap File (Free `df -h . | tail -1 | awk '{print $4}'`)\n"
        sudo swapoff -a
        sudo fallocate -l 12G /swapfile
        sudo chmod 600 /swapfile
        sudo mkswap /swapfile
        sudo swapon /swapfile
        
-       echo -e "\nTemp Folder Will Be Removed (Free `df -h . | tail -1 | awk '{print $4}'`)\n"
+       echo -e "\n\n\nTemp Folder Will Be Removed (Free `df -h . | tail -1 | awk '{print $4}'`)\n"
        sudo rm -rf $TMP_FOLDER > /dev/null 2>&1 &
 
        dpkg-query -Wf '${Installed-Size}K\t${Package}\n' | sort -nr | head -10 | numfmt --from=auto --to=si
@@ -65,8 +65,9 @@ jobs:
       run: |
         for i in $(seq 1 500);
         do
+            ls -la /tmp/put_here_to_remove/ || true
             df -h . | tail -1 | awk '{print $4}' 
-            sleep 1
+            sleep 2
         done
 
 
