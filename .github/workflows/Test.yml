@@ -15,32 +15,94 @@ jobs:
       run: |
        printf 'Free Disk Space: '
        df -h . | tail -1 | awk '{print $4}'
-         
-       sudo rm -rf /opt/ghc > /dev/null 2>&1 &
-       sudo rm -rf /opt/hostedtoolcache                   > /dev/null 2>&1 &
-       sudo rm -rf /usr/share/dotnet                      > /dev/null 2>&1 &
-       sudo rm -rf /usr/share/swift                       > /dev/null 2>&1 &
-       sudo rm -rf /usr/local/graalvm/                    > /dev/null 2>&1 &
-       sudo rm -rf /usr/local/.ghcup/                     > /dev/null 2>&1 &
-       sudo rm -rf /usr/local/share/powershell            > /dev/null 2>&1 &
-       sudo rm -rf /usr/local/share/chromium              > /dev/null 2>&1 &
-       sudo rm -rf /usr/local/lib/node_modules            > /dev/null 2>&1 &
-       sudo rm -rf /usr/local/lib/android                 > /dev/null 2>&1 &
-       sudo rm -rf /usr/local/share/boost                 > /dev/null 2>&1 &
-       sudo rm -rf /home/runner/.cargo                    > /dev/null 2>&1 &
-       sudo rm -rf /home/runner/.rustup                   > /dev/null 2>&1 &
-       sudo rm -rf /usr/local/julia*                      > /dev/null 2>&1 &
-       sudo rm -rf /opt/microsoft                         > /dev/null 2>&1 &
-       sudo rm -rf /usr/lib/dotnet                        > /dev/null 2>&1 &
-       sudo rm -rf "$AGENT_TOOLSDIRECTORY"                > /dev/null 2>&1 &
        
+       echo -e '\nRemoving Known System Packages\n'
+       sudo apt-get -yqq purge $(
+       		# dpkg -l |
+       			# grep '^ii' |
+       			# awk '{ print $2 }' |
+       			# grep -P '(mecab|linux-azure-tools-|aspnetcore|liblldb-|netstandard-|clang-tidy|clang-format|gfortran-|mysql-|google-cloud-cli|postgresql-|cabal-|dotnet-|ghc-|mongodb-|libmono|llvm-16|llvm-17)'
+       	# ) || true
+       
+       
+       echo -e '\nRemoving Large System Packages\n'
+       sudo apt-get -yqq purge snapd \
+       kubectl \
+       podman \
+       ruby3.2-doc \
+       mercurial-common \
+       git-lfs \
+       skopeo \
+       buildah \
+       vim \
+       nano \
+       python3-botocore \
+       azure-cli \
+       powershell \
+       shellcheck \
+       firefox \
+       google-chrome-stable \
+       microsoft-edge-stable \
+       google-cloud-cli* \
+       temurin* \
+       libllvm* \
+       llvm* \
+       dotnet* \
+       mysql* \
+       linux-azure* \
+       gcc* 
+       
+       echo -e '\nRemoving Docker Containers\n'
+       sudo docker image prune --all --force
+       sudo docker builder prune -a
+       sudo apt-get -yqq purge containerd.io
+       
+       echo -e '\nCleaning Up System Packages\n'
+       sudo apt-get -yqq autoremove
+       sudo apt-get -yqq clean
+       
+       
+       echo -e '\nMoving Trash Folders To Temp\n'
+       TMP_FOLDER=/tmp/put_here_to_remove/
+       
+       sudo mkdir -p $TMP_FOLDER
+       
+       sudo mv -v /opt/ghc  						     $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /opt/hostedtoolcache                   $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /usr/share/dotnet                      $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /usr/share/swift                       $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /usr/local/graalvm/                    $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /usr/local/.ghcup/                     $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /usr/local/share/powershell            $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /usr/local/share/chromium              $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /usr/local/lib/node_modules            $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /usr/local/lib/android                 $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /usr/local/share/boost                 $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /home/runner/.cargo                    $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /home/runner/.rustup                   $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /usr/local/julia*                      $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /opt/microsoft                         $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v /usr/lib/dotnet                        $TMP_FOLDER 2>/dev/null || true
+       sudo mv -v "$AGENT_TOOLSDIRECTORY"                $TMP_FOLDER 2>/dev/null || true
+       
+       echo -e '\nMaking Swap File Of 12GB\n'
+       sudo swapoff -a
+       sudo fallocate -l 12G /swapfile
+       sudo chmod 600 /swapfile
+       sudo mkswap /swapfile
+       sudo swapon /swapfile
+       
+       echo -e '\nTemp Folder Will Be Removed In Background\n'
+       sudo rm -rf $TMP_FOLDER > /dev/null 2>&1 &
+
        printf 'Free Disk Space: '
        df -h . | tail -1 | awk '{print $4}'
 
+
  
-    - name: S1
+    - name: S2
       run: |
-        for i in $(seq 1 100);
+        for i in $(seq 1 500);
         do
             df -h . | tail -1 | awk '{print $4}' 
             sleep 1
