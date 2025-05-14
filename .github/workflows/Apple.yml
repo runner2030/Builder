@@ -8,7 +8,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:        
+        include:
           - NAME: iOS
             PLATFORM: ios
             FRAMEWORK: ios
@@ -30,18 +30,18 @@ jobs:
         curl -Lks "https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=StageSource&Project=MAUI-${{matrix.PLATFORM}}&AppTitle=${{env.ALSULTAN_APP_TITLE}}&AppPackage=${{env.ALSULTAN_APP_PACKAGE}}&CodeSignProfile=${{matrix.PROFILE}}" > src.zip
         unzip -qq src.zip || true
         rm src.zip
-        chmod -R 777 ALSULTAN/Common/Vendors/GitHub/Actions
+        chmod -R 777 Common/Vendors/GitHub/Actions
     
     - name: DotNet
-      run: ${{github.workspace}}/ALSULTAN/Common/Vendors/GitHub/Actions/InstallDotNet.sh ${{matrix.FRAMEWORK}} ${{env.ALSULTAN_DOTNET_DIR}}
+      run: ${{github.workspace}}/Common/Vendors/GitHub/Actions/InstallDotNet.sh ${{matrix.FRAMEWORK}} ${{env.ALSULTAN_DOTNET_DIR}}
     
     - name: Security
-      run: ${{github.workspace}}/ALSULTAN/Common/Vendors/GitHub/Actions/AppleCertificates.sh ${{matrix.PLATFORM}} ${{matrix.PROFILE}}
+      run: ${{github.workspace}}/Common/Vendors/GitHub/Actions/AppleCertificates.sh ${{matrix.PLATFORM}} ${{matrix.PROFILE}}
 
     - name: Build
-      run: ${{github.workspace}}/ALSULTAN/Common/Vendors/GitHub/Actions/BuildMaui.sh ${{matrix.FRAMEWORK}} ${{env.ALSULTAN_DOTNET_DIR}}
+      run: ${{github.workspace}}/Common/Vendors/GitHub/Actions/BuildMaui.sh ${{matrix.FRAMEWORK}} ${{env.ALSULTAN_DOTNET_DIR}}
 
     - name: Publish
-      run: ${{github.workspace}}/ALSULTAN/Common/Vendors/GitHub/Actions/PublishMauiApple.sh ${{matrix.PLATFORM}}
+      run: ${{github.workspace}}/Common/Vendors/GitHub/Actions/PublishMauiApple.sh ${{matrix.PLATFORM}}
 
             
