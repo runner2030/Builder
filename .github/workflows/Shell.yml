@@ -41,22 +41,14 @@ jobs:
         
     - name: Prepare
       run: |
-        # Preparing Ubuntu Runner
-        echo 65535 | sudo tee /proc/sys/kernel/pid_max
-        ./Scripts/Build/SetUp/Ubuntu.sh
-        sudo apt install ninja-build
+        # Preparing Ubuntu Runner        
+        ./Scripts/Build/SetUp/UbuntuSetUp.sh
         
     - name: Build
       id: build
       run: |
         # Building Shell Package
-        ./build -a ${{matrix.arch}} ${{github.event.inputs.package}}
-        if [ -f "/tmp/excluded-${{github.event.inputs.package}}-${{matrix.arch}}" ]; then
-            echo "skip-upload=true" >> $GITHUB_OUTPUT
-        else
-            test ! -d ${{github.workspace}}/Compiled && exit 111 || true
-            test -z "$(find ${{github.workspace}}/Compiled -name *.deb)" && exit 222 || true
-        fi
+        ./Scripts/Build/SetUp/UbuntuBuild.sh ${{matrix.arch}} ${{github.event.inputs.package}}
 
     - name: Upload
       if: ${{steps.build.outputs.skip-upload != 'true' }}
