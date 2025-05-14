@@ -1,0 +1,23 @@
+name: XXXXX
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    name: ${{matrix.arch}}
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        arch1: [ios, macos]
+        arch2: [iphone, ipad]
+    env:
+      ALSULTAN_1: ${{matrix.arch1}}
+      ALSULTAN_2: ${{matrix.arch2}}
+
+
+    steps:
+    
+    - name: Source 
+      run: |
+        echo A=$ALSULTAN_1
+        echo B=$ALSULTAN_2
