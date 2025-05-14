@@ -13,4 +13,7 @@ jobs:
   
     - name: S1
       run: |
-          df -h --total
+          echo '1==================';df -h /tmp
+          echo '2==================';df -h {{github.workspace}}
+          echo '3==================';df -h ~
+          echo '4==================';df -h /
