@@ -13,10 +13,6 @@ jobs:
   
     - name: S1
       run: |
-        du -sh /usr/local/.ghcup
-        du -sh /opt/hostedtoolcache/CodeQL
-        du -sh /usr/local/lib/android/sdk/ndk
-        du -sh /usr/share/dotnet
-        du -sh /opt/ghc
-        du -sh /usr/local/share/boost
+        df -h
+        du -sh /usr/local/* /opt/* /usr/* | sort -hr
         
