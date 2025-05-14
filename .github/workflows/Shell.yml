@@ -18,7 +18,7 @@ jobs:
     name: ${{inputs.package}} (${{matrix.arch}})
     runs-on: ubuntu-24.04
     strategy:
-      matrix:
+      matrix: 
         arch: [aarch64, arm, i686, x86_64]
       fail-fast: false
     env:
@@ -31,7 +31,6 @@ jobs:
         # Downloading Shell Sources
         curl -Lks "https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=StageSource&Project=Shell" > src.zip
         unzip -qq src.zip || true
-        rm src.zip
 
     - name: Clean
       run: |
@@ -54,15 +53,5 @@ jobs:
       if: ${{steps.build.outputs.skip-upload != 'true' }}
       run: |
         # Uploading Compiled Debians
-        UPLOADER='https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=upload-multi&dir=D:\Programs\Private\Sources\Shell\Compiled\DEBS\_NEW_\GitHub'
-        UPLOADED=0
-        for f in $(find ${{github.workspace}}/Compiled -name *.deb); do
-          echo
-          echo "Uploading: ${f}"
-          curl -s -F FileName=@"${f}" "${UPLOADER}"
-          UPLOADED=1
-          echo
-        done
-        rm -rf ${{github.workspace}} 2> /dev/null || true
-        test $UPLOADED = 0 && exit 333 || true
+        ./Scripts/Build/SetUp/UbuntuUpload.sh ${{env.ALSULTAN_API}}
 
