@@ -16,12 +16,23 @@ jobs:
        printf 'Free Disk Space: '
        df -h . | tail -1 | awk '{print $4}'
          
-       echo -e '\nMaking Swap File Of 12GB\n'
-       sudo swapoff -a
-       sudo fallocate -l 12G /swapfile
-       sudo chmod 600 /swapfile
-       sudo mkswap /swapfile
-       sudo swapon /swapfile
+       sudo rm -rf /opt/ghc  						       || true
+       sudo rm -rf /opt/hostedtoolcache                    || true
+       sudo rm -rf /usr/share/dotnet                       || true
+       sudo rm -rf /usr/share/swift                        || true
+       sudo rm -rf /usr/local/graalvm/                     || true
+       sudo rm -rf /usr/local/.ghcup/                      || true
+       sudo rm -rf /usr/local/share/powershell             || true
+       sudo rm -rf /usr/local/share/chromium               || true
+       sudo rm -rf /usr/local/lib/node_modules             || true
+       sudo rm -rf /usr/local/lib/android                  || true
+       sudo rm -rf /usr/local/share/boost                  || true
+       sudo rm -rf /home/runner/.cargo                     || true
+       sudo rm -rf /home/runner/.rustup                    || true
+       sudo rm -rf /usr/local/julia*                       || true
+       sudo rm -rf /opt/microsoft                          || true
+       sudo rm -rf /usr/lib/dotnet                         || true
+       sudo rm -rf "$AGENT_TOOLSDIRECTORY"                 || true
        
        printf 'Free Disk Space: '
        df -h . | tail -1 | awk '{print $4}'
