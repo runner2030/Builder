@@ -13,7 +13,7 @@ jobs:
   
     - name: S1
       run: |
-          command -v dotnet
+          dotnet --info
           exit 1
           df -h
           sudo apt purge -yq $(
