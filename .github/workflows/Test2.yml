@@ -13,5 +13,7 @@ jobs:
   
     - name: S1
       run: |
-        du -sh ~/*
-        
+        du -sh ~/.cargo || true
+        du -sh ./target || true
+        du -sh ~/.rustup || true
+
