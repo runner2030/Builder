@@ -16,36 +16,8 @@ jobs:
        printf 'Free Disk Space: '
        df -h . | tail -1 | awk '{print $4}'
        
-       echo -e '\nRemoving Known System Packages\n'
-       sudo apt-get -yqq purge $(dpkg -l | grep '^ii' | awk '{ print $2 }' | grep -P '(mecab|linux-azure-tools-|aspnetcore|liblldb-|netstandard-|clang-tidy|clang-format|gfortran-|mysql-|google-cloud-cli|postgresql-|cabal-|dotnet-|ghc-|mongodb-|libmono|llvm-16|llvm-17)') || true
-       
-       
        echo -e '\nRemoving Large System Packages\n'
-       sudo apt-get -yqq purge snapd \
-       kubectl \
-       podman \
-       ruby3.2-doc \
-       mercurial-common \
-       git-lfs \
-       skopeo \
-       buildah \
-       vim \
-       nano \
-       python3-botocore \
-       azure-cli \
-       powershell \
-       shellcheck \
-       firefox \
-       google-chrome-stable \
-       microsoft-edge-stable \
-       google-cloud-cli* \
-       temurin* \
-       libllvm* \
-       llvm* \
-       dotnet* \
-       mysql* \
-       linux-azure* \
-       gcc* 
+       sudo apt-get -yqq purge $(dpkg -l | grep '^ii' | awk '{ print $2 }' | grep -P '(mecab|azure|aspnetcore|liblldb-|netstandard|clang|gfortran|mysql|google|postgresql|cabal|dotnet|ghc|mongodb|libmono|llvm|kubectl|podman|ruby3|mercurial|git-lfs|skopeo|buildah|vim|nano|python3-botocore|powershell|shellcheck|firefox|microsoft-edge|temurin|gcc)') || true
        
        echo -e '\nRemoving Docker Containers\n'
        sudo docker image prune --all --force
@@ -94,7 +66,7 @@ jobs:
        df -h . | tail -1 | awk '{print $4}'
 
 
- 
+
     - name: S2
       run: |
         for i in $(seq 1 500);
