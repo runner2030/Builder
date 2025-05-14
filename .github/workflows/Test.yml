@@ -94,8 +94,8 @@ jobs:
        
        echo -e '\nTemp Folder Will Be Removed In Background\n'
        sudo rm -rf $TMP_FOLDER > /dev/null 2>&1 &
-	   
-	   printf 'Free Disk Space: '
+
+       printf 'Free Disk Space: '
        df -h . | tail -1 | awk '{print $4}'
 
 
