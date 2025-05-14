@@ -9,20 +9,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - cpp_compiler: g++
-            c_compiler: gcc,
-          - cpp_compiler: g++-8
-            c_compiler: gcc-8
-          - cpp_compiler: clang++
-            c_compiler: clang
-    env:
-      ALSULTAN_1: ${{matrix.cpp_compiler}}
-      ALSULTAN_2: ${{matrix.c_compiler}}
+        
+          - PLATFORM: ios
+            FRAMEWORK: ios
+            PROFILE: NitaqPos,
+            
+          - PLATFORM: macos
+            FRAMEWORK: maccatalyst
+            PROFILE: NitaqPosMac,
 
 
     steps:
     
     - name: Source 
       run: |
-        echo A=$ALSULTAN_1
-        echo B=$ALSULTAN_2
+        echo PLATFORM=${{matrix.PLATFORM}}
+        echo FRAMEWORK=${{matrix.FRAMEWORK}}
+        echo PROFILE=${{matrix.PROFILE}}
