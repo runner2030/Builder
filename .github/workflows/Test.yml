@@ -13,7 +13,17 @@ jobs:
   
     - name: S1
       run: |
-          echo '1==================';df -h /tmp || true
-          echo '2==================';df -h ${{github.workspace}} || true
-          echo '3==================';df -h ~ || true
-          echo '4==================';df -h / || true
+         printf 'Free Disk Space: '; df -h ${{github.workspace}} | tail -1 | awk '{print $4}'
+
+
+
+
+
+
+
+
+
+
+
+
+          
