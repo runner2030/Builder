@@ -13,7 +13,24 @@ jobs:
   
     - name: S1
       run: |
-          dotnet --info
+          df -h 
+                   sudo rm -rf /opt/ghc /opt/hostedtoolcache /usr/share/dotnet /usr/share/swift
+                   sudo rm -rf /usr/local/graalvm/
+                   sudo rm -rf /usr/local/.ghcup/
+                   sudo rm -rf /usr/local/share/powershell
+                   sudo rm -rf /usr/local/share/chromium
+                   sudo rm -rf /usr/local/lib/node_modules
+                   sudo rm -rf /usr/local/lib/android
+                   
+                   sudo rm -rf "/usr/local/share/boost"
+                   sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+                   
+                   sudo rm -rf /home/runner/.cargo
+                   sudo rm -rf /home/runner/.rustup
+                   sudo rm -rf /usr/local/julia*
+                   sudo rm -rf /opt/microsoft
+                   sudo rm -rf /usr/lib/dotnet
+                   df -h
           exit 1
           df -h
           sudo apt purge -yq $(
