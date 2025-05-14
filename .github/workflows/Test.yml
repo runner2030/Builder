@@ -37,4 +37,13 @@ jobs:
        printf 'Free Disk Space: '
        df -h . | tail -1 | awk '{print $4}'
 
+ 
+    - name: S1
+      run: |
+        for i in $(seq 1 100);
+        do
+            df -h . | tail -1 | awk '{print $4}' 
+            sleep 1
+        done
+
 
