@@ -14,27 +14,30 @@ jobs:
     - name: S1
       run: |
           df -h  
-          sudo rm -rf /opt/ghc /opt/hostedtoolcache /usr/share/dotnet /usr/share/swift
-          sudo rm -rf /usr/local/graalvm/
-          sudo rm -rf /usr/local/.ghcup/
-          sudo rm -rf /usr/local/share/powershell
-          sudo rm -rf /usr/local/share/chromium
-          sudo rm -rf /usr/local/lib/node_modules
-          sudo rm -rf /usr/local/lib/android
-          
-          sudo rm -rf /usr/local/share/boost
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-          
-          sudo rm -rf /home/runner/.cargo
-          sudo rm -rf /home/runner/.rustup
-          sudo rm -rf /usr/local/julia*
-          sudo rm -rf /opt/microsoft
-          sudo rm -rf /usr/lib/dotnet
-          
-          sudo swapoff -a
-          sudo fallocate -l 16G /swapfile
-          sudo chmod 600 /swapfile
-          sudo mkswap /swapfile
-          sudo swapon /swapfile
+            
+                 # Just Removing Folders (Faster)
+                 
+                 sudo rm -rfv /opt/ghc /opt/hostedtoolcache /usr/share/dotnet /usr/share/swift
+                 sudo rm -rfv /usr/local/graalvm/
+                 sudo rm -rfv /usr/local/.ghcup/
+                 sudo rm -rfv /usr/local/share/powershell
+                 sudo rm -rfv /usr/local/share/chromium
+                 sudo rm -rfv /usr/local/lib/node_modules
+                 sudo rm -rfv /usr/local/lib/android
+
+                 sudo rm -rfv /usr/local/share/boost
+                 sudo rm -rfv "$AGENT_TOOLSDIRECTORY"
+
+                 sudo rm -rfv /home/runner/.cargo
+                 sudo rm -rfv /home/runner/.rustup
+                 sudo rm -rfv /usr/local/julia*
+                 sudo rm -rfv /opt/microsoft
+                 sudo rm -rfv /usr/lib/dotnet
+
+                 sudo swapoff -a
+                 sudo fallocate -l 16G /swapfile
+                 sudo chmod 600 /swapfile
+                 sudo mkswap /swapfile
+                 sudo swapon /swapfile
 
           df -h  
