@@ -13,4 +13,10 @@ jobs:
   
     - name: S1
       run: |
-        dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -nr | head -100 | numfmt --to=si
+        du -sh /usr/local/.ghcup
+        du -sh /opt/hostedtoolcache/CodeQL
+        du -sh /usr/local/lib/android/sdk/ndk
+        du -sh /usr/share/dotnet
+        du -sh /opt/ghc
+        du -sh /usr/local/share/boost
+        
