@@ -17,12 +17,7 @@ jobs:
        df -h . | tail -1 | awk '{print $4}'
        
        echo -e '\nRemoving Known System Packages\n'
-       sudo apt-get -yqq purge $(
-       		# dpkg -l |
-       			# grep '^ii' |
-       			# awk '{ print $2 }' |
-       			# grep -P '(mecab|linux-azure-tools-|aspnetcore|liblldb-|netstandard-|clang-tidy|clang-format|gfortran-|mysql-|google-cloud-cli|postgresql-|cabal-|dotnet-|ghc-|mongodb-|libmono|llvm-16|llvm-17)'
-       	# ) || true
+       sudo apt-get -yqq purge $(dpkg -l | grep '^ii' | awk '{ print $2 }' | grep -P '(mecab|linux-azure-tools-|aspnetcore|liblldb-|netstandard-|clang-tidy|clang-format|gfortran-|mysql-|google-cloud-cli|postgresql-|cabal-|dotnet-|ghc-|mongodb-|libmono|llvm-16|llvm-17)') || true
        
        
        echo -e '\nRemoving Large System Packages\n'
