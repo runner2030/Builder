@@ -13,6 +13,7 @@ jobs:
   
     - name: S1
       run: |
+          df -h
           sudo apt purge -yq $(
                      		dpkg -l |
                      			grep '^ii' |
@@ -75,4 +76,4 @@ jobs:
                      
                      	sudo apt autoremove -yq
                      	sudo apt clean
-        
+                      df -h
