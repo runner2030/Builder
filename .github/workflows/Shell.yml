@@ -7,11 +7,11 @@ on:
       package:
         description: "Package"
         required: true
-
+        
 concurrency:
  group: ${{github.workflow}}-${{inputs.package}}
  cancel-in-progress: true
-  
+
 jobs:
     
   Build:
@@ -52,7 +52,7 @@ jobs:
       run: |
         # Building Shell Package
         ./build -a ${{matrix.arch}} ${{github.event.inputs.package}}
-        if [ -f /tmp/excluded-${{github.event.inputs.package}}-${{matrix.arch}} ]; then
+        if [ -f "/tmp/excluded-${{github.event.inputs.package}}-${{matrix.arch}}" ]; then
             echo "skip-upload=true" >> $GITHUB_OUTPUT
         else
             test ! -d ${{github.workspace}}/Compiled && exit 111 || true
