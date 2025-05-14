@@ -17,7 +17,7 @@ jobs:
        df -h . | tail -1 | awk '{print $4}'
        
        echo -e '\nRemoving Large System Packages\n'
-       sudo apt-get -yq purge $(dpkg -l | grep '^ii' | awk '{ print $2 }' | grep -P '(mecab|azure|aspnetcore|liblldb-|netstandard|clang|gfortran|mysql|google|postgresql|cabal|dotnet|ghc|mongodb|libmono|llvm|kubectl|podman|ruby3|mercurial|git-lfs|skopeo|buildah|vim|nano|python3-botocore|powershell|shellcheck|firefox|microsoft-edge|temurin)') || true
+       sudo apt-get -yq purge $(dpkg -l | grep '^ii' | awk '{ print $2 }' | grep -P '(mecab|azure|aspnetcore|liblldb-|netstandard|clang|gfortran|mysql|google|postgresql|cabal|dotnet|ghc|mongodb|libmono|llvm|kubectl|podman|ruby3|mercurial|git-lfs|skopeo|buildah|vim|nano|python3-botocore|powershell|shellcheck|firefox|microsoft-edge)') || true
        
        echo -e '\nRemoving Docker Containers\n'
        sudo docker image prune --all --force
@@ -64,6 +64,7 @@ jobs:
 
        printf 'Free Disk Space: '
        df -h . | tail -1 | awk '{print $4}'
+
 
 
 
