@@ -14,7 +14,7 @@ jobs:
     - name: S1
       run: |
        echo -e "\n\n\nRemoving Large System Packages (Free `df -h . | tail -1 | awk '{print $4}'`)\n"
-       sudo apt-get -yq purge $(dpkg -l | grep '^ii' | awk '{ print $2 }' | grep -P '(mecab|azure|aspnetcore|liblldb-|netstandard|clang|gfortran|mysql|google|postgresql|cabal|dotnet|ghc|mongodb|libmono|llvm|kubectl|podman|ruby3|mercurial|git-lfs|skopeo|buildah|vim|nano|python3-botocore|powershell|shellcheck|firefox|microsoft-edge|temurin-21-jdk|temurin-11-jdk|temurin-8-jdk|snapd|gcc-12|gcc-13|gcc-14|g++-14|docker-ce-cli)') || true
+       sudo apt-get -yq purge $(dpkg -l | grep '^ii' | awk '{ print $2 }' | grep -P '(mecab|azure|aspnetcore|liblldb-|netstandard|clang|gfortran|mysql|google|postgresql|cabal|dotnet|ghc|mongodb|libmono|llvm|kubectl|podman|ruby3|mercurial|git-lfs|skopeo|buildah|vim|nano|python3-botocore|powershell|shellcheck|firefox|microsoft-edge|temurin-21-jdk|temurin-11-jdk|temurin-8-jdk|snapd)') || true
        
        echo -e "\n\n\nRemoving Docker Containers (Free `df -h . | tail -1 | awk '{print $4}'`)\n"
        sudo docker image prune --all --force
