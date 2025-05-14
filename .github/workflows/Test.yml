@@ -15,39 +15,41 @@ jobs:
       run: |
           df -h  
             
-                            
-          echo 'Moving Trash Folder To Temp'
-          
-          TMP_FOLDER=/tmp/put_here_to_remove/
-          
-          sudo mkdir -p $TMP_FOLDER
-          
-          sudo mv -v /opt/ghc  						      $TMP_FOLDER
-          sudo mv -v /opt/hostedtoolcache                   $TMP_FOLDER
-          sudo mv -v /usr/share/dotnet                      $TMP_FOLDER
-          sudo mv -v /usr/share/swift                       $TMP_FOLDER
-          sudo mv -v /usr/local/graalvm/                    $TMP_FOLDER
-          sudo mv -v /usr/local/.ghcup/                     $TMP_FOLDER
-          sudo mv -v /usr/local/share/powershell            $TMP_FOLDER
-          sudo mv -v /usr/local/share/chromium              $TMP_FOLDER
-          sudo mv -v /usr/local/lib/node_modules            $TMP_FOLDER
-          sudo mv -v /usr/local/lib/android                 $TMP_FOLDER
-          sudo mv -v /usr/local/share/boost                 $TMP_FOLDER
-          sudo mv -v "$AGENT_TOOLSDIRECTORY"                $TMP_FOLDER
-          sudo mv -v /home/runner/.cargo                    $TMP_FOLDER
-          sudo mv -v /home/runner/.rustup                   $TMP_FOLDER
-          sudo mv -v /usr/local/julia*                      $TMP_FOLDER
-          sudo mv -v /opt/microsoft                         $TMP_FOLDER
-          sudo mv -v /usr/lib/dotnet                        $TMP_FOLDER
-          
-          echo 'Making Swap File Of 16GB'
-          sudo swapoff -a
-          sudo fallocate -l 16G /swapfile
-          sudo chmod 600 /swapfile
-          sudo mkswap /swapfile
-          sudo swapon /swapfile
-          
-          echo 'Files removing'
-          sudo rm -rf $TMP_FOLDER
+                               
+              # Just Removing Folders (Faster)
+              
+              echo 'Moving Trash Folder To Temp'
+              
+              TMP_FOLDER=/tmp/put_here_to_remove/
+              
+              sudo mkdir -p $TMP_FOLDER
+              
+              sudo mv -v /opt/ghc  						      $TMP_FOLDER || true
+              sudo mv -v /opt/hostedtoolcache                   $TMP_FOLDER || true
+              sudo mv -v /usr/share/dotnet                      $TMP_FOLDER || true
+              sudo mv -v /usr/share/swift                       $TMP_FOLDER || true
+              sudo mv -v /usr/local/graalvm/                    $TMP_FOLDER || true
+              sudo mv -v /usr/local/.ghcup/                     $TMP_FOLDER || true
+              sudo mv -v /usr/local/share/powershell            $TMP_FOLDER || true
+              sudo mv -v /usr/local/share/chromium              $TMP_FOLDER || true
+              sudo mv -v /usr/local/lib/node_modules            $TMP_FOLDER || true
+              sudo mv -v /usr/local/lib/android                 $TMP_FOLDER || true
+              sudo mv -v /usr/local/share/boost                 $TMP_FOLDER || true
+              sudo mv -v "$AGENT_TOOLSDIRECTORY"                $TMP_FOLDER || true
+              sudo mv -v /home/runner/.cargo                    $TMP_FOLDER || true
+              sudo mv -v /home/runner/.rustup                   $TMP_FOLDER || true
+              sudo mv -v /usr/local/julia*                      $TMP_FOLDER || true
+              sudo mv -v /opt/microsoft                         $TMP_FOLDER || true
+              sudo mv -v /usr/lib/dotnet                        $TMP_FOLDER || true
+              
+              echo 'Making Swap File Of 16GB'
+              sudo swapoff -a
+              sudo fallocate -l 16G /swapfile
+              sudo chmod 600 /swapfile
+              sudo mkswap /swapfile
+              sudo swapon /swapfile
+              
+              echo 'Files removing'
+              sudo rm -rf $TMP_FOLDER
 
           df -h  
