@@ -7,7 +7,11 @@ on:
       package:
         description: "Package"
         required: true
-        
+
+concurrency:
+ group: ${{github.workflow}}-${{inputs.package}}
+ cancel-in-progress: true
+  
 jobs:
     
   Build:
