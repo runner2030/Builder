@@ -15,71 +15,7 @@ jobs:
       run: |
        printf 'Free Disk Space: '
        df -h . | tail -1 | awk '{print $4}'
-       
-       echo -e '\nRemoving Known System Packages\n'
-       sudo apt-get -yqq purge $(dpkg -l | grep '^ii' | awk '{ print $2 }' | grep -P '(mecab|linux-azure-tools-|aspnetcore|liblldb-|netstandard-|clang-tidy|clang-format|gfortran-|mysql-|google-cloud-cli|postgresql-|cabal-|dotnet-|ghc-|mongodb-|libmono|llvm-16|llvm-17)') || true
-       
-       
-       echo -e '\nRemoving Large System Packages\n'
-       sudo apt-get -yqq purge snapd || true
-       sudo apt-get -yqq purge kubectl || true
-       sudo apt-get -yqq purge podman || true
-       sudo apt-get -yqq purge ruby3.2-doc || true
-       sudo apt-get -yqq purge mercurial-common || true
-       sudo apt-get -yqq purge git-lfs || true
-       sudo apt-get -yqq purge skopeo || true
-       sudo apt-get -yqq purge buildah || true
-       sudo apt-get -yqq purge vim || true
-       sudo apt-get -yqq purge nano || true
-       sudo apt-get -yqq purge python3-botocore || true
-       sudo apt-get -yqq purge azure-cli || true
-       sudo apt-get -yqq purge powershell || true
-       sudo apt-get -yqq purge shellcheck || true
-       sudo apt-get -yqq purge firefox || true
-       sudo apt-get -yqq purge google-chrome-stable || true
-       sudo apt-get -yqq purge microsoft-edge-stable || true
-       sudo apt-get -yqq purge google-cloud-cli* || true
-       sudo apt-get -yqq purge temurin* || true
-       sudo apt-get -yqq purge libllvm* || true
-       sudo apt-get -yqq purge llvm* || true
-       sudo apt-get -yqq purge dotnet* || true
-       sudo apt-get -yqq purge mysql* || true
-       sudo apt-get -yqq purge linux-azure* || true
-       sudo apt-get -yqq purge gcc* || true
-       
-       echo -e '\nRemoving Docker Containers\n'
-       sudo docker image prune --all --force
-       sudo docker builder prune -a
-       sudo apt-get -yq purge containerd.io
-       
-       echo -e '\nCleaning Up System Packages\n'
-       sudo apt-get -yqq autoremove
-       sudo apt-get -yqq clean
-       
-       
-       echo -e '\nMoving Trash Folders To Temp\n'
-       TMP_FOLDER=/tmp/put_here_to_remove/
-       
-       sudo mkdir -p $TMP_FOLDER
-       
-       sudo mv -v /opt/ghc  						      $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /opt/hostedtoolcache                   $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /usr/share/dotnet                      $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /usr/share/swift                       $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /usr/local/graalvm/                    $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /usr/local/.ghcup/                     $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /usr/local/share/powershell            $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /usr/local/share/chromium              $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /usr/local/lib/node_modules            $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /usr/local/lib/android                 $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /usr/local/share/boost                 $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /home/runner/.cargo                    $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /home/runner/.rustup                   $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /usr/local/julia*                      $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /opt/microsoft                         $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v /usr/lib/dotnet                        $TMP_FOLDER 2>/dev/null || true
-       sudo mv -v "$AGENT_TOOLSDIRECTORY"                $TMP_FOLDER 2>/dev/null || true
-       
+         
        echo -e '\nMaking Swap File Of 12GB\n'
        sudo swapoff -a
        sudo fallocate -l 12G /swapfile
@@ -87,9 +23,6 @@ jobs:
        sudo mkswap /swapfile
        sudo swapon /swapfile
        
-       echo -e '\nTemp Folder Will Be Removed In Background\n'
-       sudo rm -rf $TMP_FOLDER > /dev/null 2>&1 &
-
        printf 'Free Disk Space: '
        df -h . | tail -1 | awk '{print $4}'
 
