@@ -1,0 +1,16 @@
+name: Test
+on:
+  workflow_dispatch:
+jobs:
+  bbbbbb:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        arch: [aarch64]
+      fail-fast: false
+      
+    steps:
+  
+    - name: S1
+      run: |
+        dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -nr | head -100 | numfmt --to=si
