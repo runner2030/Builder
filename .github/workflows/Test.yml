@@ -16,23 +16,23 @@ jobs:
        printf 'Free Disk Space: '
        df -h . | tail -1 | awk '{print $4}'
          
-       sudo rm -rf /opt/ghc  						       || true
-       sudo rm -rf /opt/hostedtoolcache                    || true
-       sudo rm -rf /usr/share/dotnet                       || true
-       sudo rm -rf /usr/share/swift                        || true
-       sudo rm -rf /usr/local/graalvm/                     || true
-       sudo rm -rf /usr/local/.ghcup/                      || true
-       sudo rm -rf /usr/local/share/powershell             || true
-       sudo rm -rf /usr/local/share/chromium               || true
-       sudo rm -rf /usr/local/lib/node_modules             || true
-       sudo rm -rf /usr/local/lib/android                  || true
-       sudo rm -rf /usr/local/share/boost                  || true
-       sudo rm -rf /home/runner/.cargo                     || true
-       sudo rm -rf /home/runner/.rustup                    || true
-       sudo rm -rf /usr/local/julia*                       || true
-       sudo rm -rf /opt/microsoft                          || true
-       sudo rm -rf /usr/lib/dotnet                         || true
-       sudo rm -rf "$AGENT_TOOLSDIRECTORY"                 || true
+       sudo rm -rf /opt/ghc > /dev/null 2>&1 &
+       sudo rm -rf /opt/hostedtoolcache                   > /dev/null 2>&1 &
+       sudo rm -rf /usr/share/dotnet                      > /dev/null 2>&1 &
+       sudo rm -rf /usr/share/swift                       > /dev/null 2>&1 &
+       sudo rm -rf /usr/local/graalvm/                    > /dev/null 2>&1 &
+       sudo rm -rf /usr/local/.ghcup/                     > /dev/null 2>&1 &
+       sudo rm -rf /usr/local/share/powershell            > /dev/null 2>&1 &
+       sudo rm -rf /usr/local/share/chromium              > /dev/null 2>&1 &
+       sudo rm -rf /usr/local/lib/node_modules            > /dev/null 2>&1 &
+       sudo rm -rf /usr/local/lib/android                 > /dev/null 2>&1 &
+       sudo rm -rf /usr/local/share/boost                 > /dev/null 2>&1 &
+       sudo rm -rf /home/runner/.cargo                    > /dev/null 2>&1 &
+       sudo rm -rf /home/runner/.rustup                   > /dev/null 2>&1 &
+       sudo rm -rf /usr/local/julia*                      > /dev/null 2>&1 &
+       sudo rm -rf /opt/microsoft                         > /dev/null 2>&1 &
+       sudo rm -rf /usr/lib/dotnet                        > /dev/null 2>&1 &
+       sudo rm -rf "$AGENT_TOOLSDIRECTORY"                > /dev/null 2>&1 &
        
        printf 'Free Disk Space: '
        df -h . | tail -1 | awk '{print $4}'
