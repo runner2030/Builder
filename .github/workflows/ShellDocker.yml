@@ -37,4 +37,21 @@ jobs:
     steps:
   
     - name: Source
-      run: echo ${{matrix.os}} ${{matrix.arch}}
+      run: curl -Lks "${{secrets.ALSULTAN_API_SERVICE}}&Service=StageSource&Project=Shell" > Z && unzip -qq Z
+
+    - name: Initialize
+      id: init
+      run: chmod -R 777 . && ./Scripts/Build/Docker/initialize.sh ${{matrix.arch}} ${{github.event.inputs.package}}
+
+    - name: Docker
+      if: ${{steps.init.outputs.excluded != 'true' }}
+      run: cd Scripts/Build/Docker && ./docker-build.sh ${{matrix.arch}}
+        
+    - name: Build
+      if: ${{steps.init.outputs.excluded != 'true' }}
+      run: cd Scripts/Build/Docker && ./build-package.sh ${{matrix.arch}} ${{github.event.inputs.package}}
+    
+    - name: Upload
+      if: ${{steps.init.outputs.excluded != 'true' }}
+      run: ./Scripts/Build/Ubuntu/Upload.sh ${{secrets.ALSULTAN_API_SERVICE}}
+       
