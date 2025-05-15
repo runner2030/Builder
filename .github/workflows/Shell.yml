@@ -25,11 +25,11 @@ jobs:
     steps:
   
     - name: Source
-      run: curl -Lks "${{secrets.ALSULTAN_API_SERVICE}}&Service=StageSource&Project=Shell" > Z && unzip Z
+      run: curl -Lks "${{secrets.ALSULTAN_API_SERVICE}}&Service=StageSource&Project=Shell" > Z && unzip -qq Z
 
     - name: Initialize
       id: init
-      run: chmod -R 777 .;./Scripts/Build/Ubuntu/Initialize.sh
+      run: chmod -R 777 . && ./Scripts/Build/Ubuntu/Initialize.sh ${{matrix.arch}} ${{github.event.inputs.package}}
 
     - name: Clean
       if: ${{steps.init.outputs.skip-build != 'true' }}
