@@ -18,30 +18,27 @@ jobs:
             FRAMEWORK: maccatalyst
             PROFILE: NitaqPosMac
     env:
-      ALSULTAN_API: ${{secrets.ALSULTAN_API}}
       ALSULTAN_APP_TITLE: 'Nitaq'
       ALSULTAN_APP_PACKAGE: 'alsultan.pos'
-      ALSULTAN_DOTNET_DIR: ${{github.workspace}}/DotNet
 
     steps:
     
-    - name: Source       
+    - name: Source
       run: |
-        curl -Lks "https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=StageSource&Project=MAUI-${{matrix.PLATFORM}}&AppTitle=${{env.ALSULTAN_APP_TITLE}}&AppPackage=${{env.ALSULTAN_APP_PACKAGE}}&CodeSignProfile=${{matrix.PROFILE}}" > src.zip
-        unzip -qq src.zip || true
-        rm src.zip
+        curl -Lks "${{secrets.ALSULTAN_API_SERVICE}}&Service=StageSource&Project=MAUI-${{matrix.PLATFORM}}&AppTitle=${{env.ALSULTAN_APP_TITLE}}&AppPackage=${{env.ALSULTAN_APP_PACKAGE}}&CodeSignProfile=${{matrix.PROFILE}}" > Z
+        unzip -qq Z || true
         chmod -R 777 Common/Vendors/GitHub/Actions
     
     - name: DotNet
-      run: ${{github.workspace}}/Common/Vendors/GitHub/Actions/InstallDotNet.sh ${{matrix.FRAMEWORK}} ${{env.ALSULTAN_DOTNET_DIR}}
+      run: ${{github.workspace}}/Common/Vendors/GitHub/Actions/InstallDotNet.sh ${{matrix.FRAMEWORK}} ${{github.workspace}}/DotNet
     
     - name: Security
       run: ${{github.workspace}}/Common/Vendors/GitHub/Actions/AppleCertificates.sh ${{matrix.PLATFORM}} ${{matrix.PROFILE}}
 
     - name: Build
-      run: ${{github.workspace}}/Common/Vendors/GitHub/Actions/BuildMaui.sh ${{matrix.FRAMEWORK}} ${{env.ALSULTAN_DOTNET_DIR}}
+      run: ${{github.workspace}}/Common/Vendors/GitHub/Actions/BuildMaui.sh ${{matrix.FRAMEWORK}} ${{github.workspace}}/DotNet
 
     - name: Publish
       run: ${{github.workspace}}/Common/Vendors/GitHub/Actions/PublishMauiApple.sh ${{matrix.PLATFORM}}
- 
+
             
