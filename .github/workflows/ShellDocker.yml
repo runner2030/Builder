@@ -49,7 +49,7 @@ jobs:
         
     - name: Build
       if: ${{steps.init.outputs.excluded != 'true' }}
-      run: cd Scripts/Build/Docker && ./build-package.sh ${{matrix.arch}} ${{github.event.inputs.package}}
+      run: ./Scripts/Build/Docker/build-package.sh ${{matrix.arch}} ${{github.event.inputs.package}}
     
     - name: Upload
       if: ${{steps.init.outputs.excluded != 'true' }}
