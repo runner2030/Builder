@@ -37,4 +37,4 @@ jobs:
     steps:
   
     - name: Source
-      run: echo ${{matrix.os}} (${{matrix.arch}})
+      run: echo ${{matrix.os}} ${{matrix.arch}}
