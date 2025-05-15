@@ -21,37 +21,29 @@ jobs:
       matrix: 
         arch: [aarch64, arm, i686, x86_64]
       fail-fast: false
-    env:
-      ALSULTAN_API: ${{secrets.ALSULTAN_API}}
 
     steps:
   
     - name: Source
-      run: |
-        # Downloading Shell Sources
-        curl -Lks "https://alsultan.vip/Service/Vendors/GitHub/Services?API=${{env.ALSULTAN_API}}&Service=StageSource&Project=Shell" > src.zip
-        unzip -qq src.zip || true
+      run: curl -Lks "${{secrets.ALSULTAN_API_SERVICE}}&Service=StageSource&Project=Shell" | bsdtar -xf-
+
+    - name: Initialize
+      id: init
+      run: chmod -R 777 .;./Scripts/Build/Ubuntu/Initialize.sh
 
     - name: Clean
-      run: |
-        # Cleaning Ubuntu Runner
-        chmod -R 777 .
-        ./Scripts/Build/SetUp/UbuntuClean.sh
+      if: ${{steps.init.outputs.skip-build != 'true' }}
+      run: ./Scripts/Build/Ubuntu/Clean.sh
         
     - name: Prepare
-      run: |
-        # Preparing Ubuntu Runner        
-        ./Scripts/Build/SetUp/UbuntuSetUp.sh
+      if: ${{steps.init.outputs.skip-build != 'true' }}
+      run: ./Scripts/Build/Ubuntu/SetUp.sh
         
     - name: Build
-      id: build
-      run: |
-        # Building Shell Package
-        ./Scripts/Build/SetUp/UbuntuBuild.sh ${{matrix.arch}} ${{github.event.inputs.package}}
+      if: ${{steps.init.outputs.skip-build != 'true' }}
+      run: ./Scripts/Build/Ubuntu/Build.sh ${{matrix.arch}} ${{github.event.inputs.package}}
 
     - name: Upload
-      if: ${{steps.build.outputs.skip-upload != 'true' }}
-      run: |
-        # Uploading Compiled Debians
-        ./Scripts/Build/SetUp/UbuntuUpload.sh ${{env.ALSULTAN_API}}
+      if: ${{steps.init.outputs.skip-build != 'true' }}
+      run: ./Scripts/Build/Ubuntu/Upload.sh ${{env.ALSULTAN_API_SERVICE}}
 
