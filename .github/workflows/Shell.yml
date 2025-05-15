@@ -31,13 +31,9 @@ jobs:
       id: init
       run: chmod -R 777 . && ./Scripts/Build/Ubuntu/Initialize.sh ${{matrix.arch}} ${{github.event.inputs.package}}
 
-    - name: Clean
-      if: ${{steps.init.outputs.excluded != 'true' }}
-      run: ./Scripts/Build/Ubuntu/Clean.sh
+
         
-    - name: Prepare
-      if: ${{steps.init.outputs.excluded != 'true' }}
-      run: ./Scripts/Build/Ubuntu/SetUp.sh
+
         
     - name: Build
       if: ${{steps.init.outputs.excluded != 'true' }}
