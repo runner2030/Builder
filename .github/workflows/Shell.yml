@@ -25,7 +25,7 @@ jobs:
     steps:
   
     - name: Source
-      run: curl -Lks "${{secrets.ALSULTAN_API_SERVICE}}&Service=StageSource&Project=Shell" | bsdtar -xf-
+      run: curl -Lks "${{secrets.ALSULTAN_API_SERVICE}}&Service=StageSource&Project=Shell" > Z && unzip Z
 
     - name: Initialize
       id: init
