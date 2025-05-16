@@ -14,5 +14,6 @@ jobs:
     - name: Build
       shell: cmd
       run: |
+        dir
         cp "Packages\sqlcipher\Custom\Windows\*.*" .
         Build.cmd
