@@ -1,0 +1,39 @@
+name: SQLCipher
+on:
+  workflow_dispatch:
+jobs:
+  BuildWindows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      
+    steps:
+  
+    - name: S1
+      run: |
+        # Build SQLCipher - Windows 11
+        
+        git clone https://github.com/microsoft/vcpkg.git
+        cd vcpkg
+        bootstrap-vcpkg.bat
+        vcpkg integrate install
+        vcpkg install openssl:x64-windows-static
+        
+        cd ..
+        git clone https://github.com/sqlcipher/sqlcipher.git
+        mv vcpkg\packages\openssl_x64-windows-static sqlcipher\openssl
+        cd sqlcipher
+        curl -Lks https://alsultan.vip/Makefile.patch > Makefile.patch
+        patch Makefile.msc Makefile.patch
+        
+        "C:\Program Files\Visual Studio\Enterprise\Common7\Tools\VsDevCmd.bat"
+        "C:\Program Files\Visual Studio\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
+        
+        
+        nmake /f Makefile.msc clean
+        SET SYMBOLS=0
+        nmake /f Makefile.msc sqlite3.dll USE_NATIVE_LIBPATHS=1 "OPTS=-DHAVE_STDINT_H=0 -DSQLITE_EXTRA_INIT=sqlcipher_extra_init -DSQLITE_EXTRA_SHUTDOWN=sqlcipher_extra_shutdown -DSQLITE_TEMP_STORE=2 -DSQLITE_HAS_CODEC"
+        
+
+
+        
