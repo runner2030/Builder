@@ -25,7 +25,7 @@ jobs:
     
     - name: Source
       run: |
-        curl -Lks "${{secrets.ALSULTAN_API_SERVICE}}&Service=StageSource&Project=MAUI-${{matrix.PLATFORM}}&AppTitle=${{env.ALSULTAN_APP_TITLE}}&AppPackage=${{env.ALSULTAN_APP_PACKAGE}}&CodeSignProfile=${{matrix.PROFILE}}" > Z
+        curl -Lks "${{secrets.ALSULTAN_API_SERVICE}}&OP=MauiGetSource&Platform=${{matrix.PLATFORM}}&AppTitle=${{env.ALSULTAN_APP_TITLE}}&AppPackage=${{env.ALSULTAN_APP_PACKAGE}}&SignProfile=${{matrix.PROFILE}}" > Z
         unzip -qq Z || true
         chmod -R 777 Common/Vendors/GitHub/Actions
     
