@@ -6,14 +6,11 @@ jobs:
     runs-on: windows-2025
     strategy:
       fail-fast: false
-     
-    defaults:
-     run:
-      shell: cmd
-	  
+     	  
     steps:
   
     - name: S1
+      shell: pwsh
       run: |
         # Build SQLCipher - Windows 11
         
