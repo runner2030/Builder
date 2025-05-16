@@ -8,8 +8,8 @@ jobs:
       fail-fast: false
      
     defaults:
-      run:
-      shell: bash
+     run:
+shell: bash
 	  
     steps:
   
