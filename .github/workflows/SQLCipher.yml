@@ -6,7 +6,11 @@ jobs:
     runs-on: windows-2025
     strategy:
       fail-fast: false
-      
+     
+    defaults:
+      run:
+      shell: bash
+	  
     steps:
   
     - name: S1
@@ -33,6 +37,7 @@ jobs:
         nmake /f Makefile.msc clean
         SET SYMBOLS=0
         nmake /f Makefile.msc sqlite3.dll USE_NATIVE_LIBPATHS=1 "OPTS=-DHAVE_STDINT_H=0 -DSQLITE_EXTRA_INIT=sqlcipher_extra_init -DSQLITE_EXTRA_SHUTDOWN=sqlcipher_extra_shutdown -DSQLITE_TEMP_STORE=2 -DSQLITE_HAS_CODEC"
+		
         
 
 
