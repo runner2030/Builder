@@ -10,7 +10,7 @@ jobs:
     steps:
   
     - name: S1
-      shell: pwsh
+      shell: cmd
       run: |
         # Build SQLCipher - Windows 11
         
