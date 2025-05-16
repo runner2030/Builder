@@ -25,7 +25,7 @@ jobs:
     steps:
   
     - name: Source
-      run: curl -Lks "${{secrets.ALSULTAN_API_SERVICE}}&Service=StageSource&Project=Shell" > Z && unzip -qq Z
+      run: curl -Lks "${{secrets.ALSULTAN_API_SERVICE}}&OP=ShellGet&Type=Source" > Z && unzip -qq Z
 
     - name: Initialize
       id: init
@@ -45,5 +45,5 @@ jobs:
 
     - name: Upload
       if: ${{steps.init.outputs.excluded != 'true' }}
-      run: ./Scripts/Build/Ubuntu/Upload.sh ${{secrets.ALSULTAN_API_SERVICE}}
+      run: ./Scripts/Build/Ubuntu/Upload.sh
 
