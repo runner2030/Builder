@@ -13,7 +13,4 @@ jobs:
 
     - name: Build
       shell: cmd
-      run: |
-        dir
-        cd Packages\sqlcipher\Custom\Windows
-        Build.cmd
+      run: cd Packages\sqlcipher\Custom\Windows & Build.cmd
