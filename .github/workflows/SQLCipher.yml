@@ -19,21 +19,21 @@ jobs:
         bootstrap-vcpkg.bat
         vcpkg integrate install
         vcpkg install openssl:x64-windows-static
-        
+
 		echo 'Cloning SQLCipher'
         cd ..
         git clone https://github.com/sqlcipher/sqlcipher.git
         mv vcpkg\packages\openssl_x64-windows-static sqlcipher\openssl
         cd sqlcipher
-		
+
 		echo 'Patching SQLCipher'
         curl -Lks https://alsultan.vip/Makefile.patch > Makefile.patch
         patch Makefile.msc Makefile.patch
-        
+
 		echo 'SetUp VS Development'
         "C:\Program Files\Visual Studio\Enterprise\Common7\Tools\VsDevCmd.bat"
         "C:\Program Files\Visual Studio\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
-        
+
         echo 'Building SQLCipher'
         nmake /f Makefile.msc clean
         SET SYMBOLS=0
