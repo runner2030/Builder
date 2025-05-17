@@ -1,21 +1,21 @@
 name: Shell
-run-name: ${{inputs.package}}
+run-name: ${{inputs.packages}}
 
 on:
   workflow_dispatch:
     inputs:
-      package:
-        description: "Package"
+      packages:
+        description: "Packages"
         required: true
         
 concurrency:
- group: ${{github.workflow}}-${{inputs.package}}
+ group: ${{github.workflow}}-${{inputs.packages}}
  cancel-in-progress: true
 
 jobs:
     
   Build:
-    name: ${{inputs.package}} (${{matrix.arch}})
+    name: ${{inputs.packages}} (${{matrix.arch}})
     runs-on: ubuntu-24.04
     strategy:
       matrix: 
@@ -29,7 +29,7 @@ jobs:
 
     - name: Initialize
       id: init
-      run: chmod -R 777 . && ./Scripts/Build/Ubuntu/Initialize.sh ${{matrix.arch}} ${{github.event.inputs.package}}
+      run: chmod -R 777 . && ./Scripts/Build/Ubuntu/Initialize.sh ${{matrix.arch}} ${{github.event.inputs.packages}}
 
     - name: Clean
       if: ${{steps.init.outputs.excluded != 'true' }}
@@ -41,7 +41,7 @@ jobs:
         
     - name: Build
       if: ${{steps.init.outputs.excluded != 'true' }}
-      run: ./Scripts/Build/Ubuntu/Build.sh ${{matrix.arch}} ${{github.event.inputs.package}}
+      run: ./Scripts/Build/Ubuntu/Build.sh ${{matrix.arch}} ${{github.event.inputs.packages}}
 
     - name: Upload
       if: ${{steps.init.outputs.excluded != 'true' }}
