@@ -1,4 +1,4 @@
-name: Shell
+name: main222
 run-name: ${{inputs.package}}
 
 on:
@@ -8,7 +8,6 @@ on:
 jobs:
     
   Build:
-    name: ${{inputs.package}} (${{matrix.arch}})
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
