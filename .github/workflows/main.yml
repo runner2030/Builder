@@ -3,14 +3,6 @@ run-name: ${{inputs.package}}
 
 on:
   workflow_dispatch:
-    inputs:
-      package:
-        description: "Package"
-        required: true
-        
-concurrency:
- group: ${{github.workflow}}-${{inputs.package}}
- cancel-in-progress: true
 
 jobs:
     
@@ -18,14 +10,14 @@ jobs:
     name: ${{inputs.package}} (${{matrix.arch}})
     runs-on: ubuntu-24.04
     strategy:
-      matrix: 
-        arch: [aarch64, arm, i686, x86_64]
       fail-fast: false
 
     steps:
   
     - name: Source
       run: |
-        TERM=linux /bin/bash -c ' watch pwd'
-       
+        
+        TERM=linux /bin/bash -c 'watch pwd > a' &
+        sleep 10
+        cat a
       
