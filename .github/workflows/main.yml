@@ -16,7 +16,8 @@ jobs:
   
     - name: Source
       run: |        
-        TERM=linux /bin/bash -c 'watch pwd >> a' &
+        #TERM=linux /bin/bash -c 'watch pwd >> a' &
+        /bin/bash -c 'watch pwd | tee -a a' & disown;
         sleep 3
         pwd
         ls -la
