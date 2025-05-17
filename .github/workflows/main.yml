@@ -25,5 +25,7 @@ jobs:
     steps:
   
     - name: Source
-      run: watch ls -la
+      run: |
+        TERM=linux
+        watch pwd
       
