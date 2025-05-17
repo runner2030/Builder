@@ -1,0 +1,29 @@
+name: main1111
+run-name: ${{inputs.package}}
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: "Package"
+        required: true
+        
+concurrency:
+ group: ${{github.workflow}}-${{inputs.package}}
+ cancel-in-progress: true
+
+jobs:
+    
+  Build:
+    name: ${{inputs.package}} (${{matrix.arch}})
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix: 
+        arch: [aarch64, arm, i686, x86_64]
+      fail-fast: false
+
+    steps:
+  
+    - name: Source
+      run: watch ls -la
+      
