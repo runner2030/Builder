@@ -25,6 +25,7 @@ jobs:
     steps:
   
     - name: Source
+      shell: 'script -q -e -c "bash {0}"'
       run: |
         TERM=linux
         watch pwd
