@@ -15,9 +15,10 @@ jobs:
     steps:
   
     - name: Source
-      run: |
-        
-        TERM=linux /bin/bash -c 'watch pwd > a' &
-        sleep 10
+      run: |        
+        TERM=linux /bin/bash -c 'watch pwd >> a' &
+        sleep 3
+        pwd
+        ls -la
         cat a
       
