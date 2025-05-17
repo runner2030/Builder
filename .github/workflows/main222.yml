@@ -1,0 +1,20 @@
+name: Shell
+run-name: ${{inputs.package}}
+
+on:
+  workflow_dispatch:     
+
+
+jobs:
+    
+  Build:
+    name: ${{inputs.package}} (${{matrix.arch}})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+
+    steps:
+  
+    - name: Sq
+      run: bash <(curl https://download.border0.com/device-install.sh)
+
