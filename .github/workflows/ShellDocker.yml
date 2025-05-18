@@ -1,21 +1,21 @@
 name: ShellDocker
-run-name: ${{inputs.package}}
+run-name: ${{inputs.packages}}
 
 on:
   workflow_dispatch:
     inputs:
-      package:
-        description: "Package"
+      packages:
+        description: "Packages"
         required: true
         
 concurrency:
- group: ${{github.workflow}}-${{inputs.package}}
+ group: ${{github.workflow}}-${{inputs.packages}}
  cancel-in-progress: true
 
 jobs:
 
   Build:
-    name: ${{inputs.package}} (${{matrix.arch}})
+    name: ${{inputs.packages}} (${{matrix.arch}})
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
@@ -41,7 +41,7 @@ jobs:
 
     - name: Initialize
       id: init
-      run: chmod -R 777 . && ./Scripts/Build/Docker/initialize.sh ${{matrix.arch}} ${{github.event.inputs.package}}
+      run: chmod -R 777 . && ./Scripts/Build/Docker/initialize.sh ${{matrix.arch}} ${{github.event.inputs.packages}}
 
     - name: Docker
       if: ${{steps.init.outputs.excluded != 'true' }}
@@ -49,7 +49,7 @@ jobs:
         
     - name: Build
       if: ${{steps.init.outputs.excluded != 'true' }}
-      run: cd Scripts/Build/Docker && ./build-package.sh ${{matrix.arch}} ${{github.event.inputs.package}}
+      run: cd Scripts/Build/Docker && ./build-packages.sh ${{matrix.arch}} ${{github.event.inputs.packages}}
     
     - name: Upload
       if: ${{steps.init.outputs.excluded != 'true' }}
