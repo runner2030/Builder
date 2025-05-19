@@ -22,13 +22,10 @@ jobs:
         include:
           - os: ubuntu-24.04-arm
             arch: aarch64
-
           - os: ubuntu-24.04-arm
             arch: arm
-
           - os: ubuntu-24.04
             arch: i686
-
           - os: ubuntu-24.04
             arch: x86_64
 
@@ -37,7 +34,7 @@ jobs:
     steps:
   
     - name: Source
-      run: curl -Lks "${{secrets.ALSULTAN_API_SERVICE}}&OP=ShellGet&Type=Source" > Z && unzip -qq Z
+      run: curl --retry 5 --retry-delay 10 --retry-all-errors -Lk "${{secrets.ALSULTAN_API_SERVICE}}&OP=ShellGet&Type=Source" > Z && unzip -qq Z
 
     - name: Initialize
       id: init
