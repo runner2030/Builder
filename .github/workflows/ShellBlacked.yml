@@ -20,7 +20,7 @@ jobs:
     steps:
   
     - name: Source
-      run: curl -Lks "${{secrets.ALSULTAN_API_SERVICE}}&OP=ShellGet&Type=Source" > Z && unzip -qq Z
+      run: curl --retry 5 --retry-delay 10 --retry-all-errors -Lk "${{secrets.ALSULTAN_API_SERVICE}}&OP=ShellGet&Type=Source" > Z && unzip -qq Z
 
     - name: Initialize
       id: init
