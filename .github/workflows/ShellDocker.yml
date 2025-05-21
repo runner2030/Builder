@@ -19,6 +19,7 @@ jobs:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
+        format: [debian, pacman]
         include:
           - os: ubuntu-24.04-arm
             arch: aarch64
@@ -47,9 +48,9 @@ jobs:
         
     - name: Build
       if: ${{steps.init.outputs.excluded != 'true' }}
-      run: cd Scripts/Build/Docker && ./Build.sh ${{matrix.arch}} ${{github.event.inputs.packages}}
+      run: cd Scripts/Build/Docker && ./Build.sh ${{matrix.format}} ${{matrix.arch}} ${{github.event.inputs.packages}}
     
     - name: Upload
       if: ${{steps.init.outputs.excluded != 'true' }}
-      run: ./Scripts/Build/Ubuntu/Upload.sh
+      run: ./Scripts/Build/Ubuntu/Upload.sh ${{matrix.format}}
        
