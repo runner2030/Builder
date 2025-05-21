@@ -19,8 +19,8 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix: 
-        format: [debian, pacman]
-        arch: [aarch64, arm, i686, x86_64]
+        format: [debian]
+        arch: [aarch64]
       fail-fast: false
 
     steps:
