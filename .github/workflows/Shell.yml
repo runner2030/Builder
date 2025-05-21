@@ -46,5 +46,5 @@ jobs:
 
     - name: Upload
       if: ${{steps.init.outputs.excluded != 'true' }}
-      run: ./Scripts/Build/Ubuntu/Upload.sh
+      run: ./Scripts/Build/Ubuntu/Upload.sh ${{matrix.format}}
 
