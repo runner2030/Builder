@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix: 
+        format: [debian, pacman]
         arch: [aarch64, arm, i686, x86_64]
       fail-fast: false
 
@@ -41,7 +42,7 @@ jobs:
         
     - name: Build
       if: ${{steps.init.outputs.excluded != 'true' }}
-      run: ./Scripts/Build/Ubuntu/Build.sh ${{matrix.arch}} ${{github.event.inputs.packages}}
+      run: ./Scripts/Build/Ubuntu/Build.sh ${{matrix.format}} ${{matrix.arch}} ${{github.event.inputs.packages}}
 
     - name: Upload
       if: ${{steps.init.outputs.excluded != 'true' }}
