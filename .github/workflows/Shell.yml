@@ -29,7 +29,7 @@ jobs:
       run: |
         for i in {1..20}; do
             echo "Downloading Source Attempt ${i}..."
-            test $i = 0 || sleep 30
+            test $i != 1 && sleep 30
             curl -LksS "${{secrets.ALSULTAN_API_SERVICE}}&OP=ShellGet&Type=Source" -o Z || continue
             unzip -q Z && break || continue
         done        
