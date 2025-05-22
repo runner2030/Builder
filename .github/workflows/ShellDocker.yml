@@ -21,21 +21,31 @@ jobs:
       matrix:
         format: [debian, pacman]
         include:
-          - os: ubuntu-24.04-arm
-            arch: aarch64
-          - os: ubuntu-24.04-arm
-            arch: arm
+          - arch: aarch64
+            os: ubuntu-24.04-arm
+
+          - arch: arm
+            os: ubuntu-24.04-arm
+
+          - arch: i686
           - os: ubuntu-24.04
-            arch: i686
-          - os: ubuntu-24.04
-            arch: x86_64
+  
+          - arch: x86_64
+            os: ubuntu-24.04
+            
 
       fail-fast: false
       
     steps:
   
     - name: Source
-      run: curl --retry 5 --retry-delay 10 --retry-all-errors -Lk "${{secrets.ALSULTAN_API_SERVICE}}&OP=ShellGet&Type=Source" > Z && unzip -qq Z
+      run: |
+        for i in {1..20}; do
+            echo "Downloading Source Attempt ${i}..."
+            test $i != 1 && sleep 30
+            curl -Lk "${{secrets.ALSULTAN_API_SERVICE}}&OP=ShellGet&Type=Source" -o Z || continue
+            unzip -q Z && break || continue
+        done
 
     - name: Initialize
       id: init
