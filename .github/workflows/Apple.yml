@@ -25,9 +25,13 @@ jobs:
     
     - name: Source
       run: |
-        curl --retry 5 --retry-delay 10 --retry-all-errors -Lk "${{secrets.ALSULTAN_API_SERVICE}}&OP=MauiGetSource&Platform=${{matrix.PLATFORM}}&AppTitle=${{env.ALSULTAN_APP_TITLE}}&AppPackage=${{env.ALSULTAN_APP_PACKAGE}}&SignProfile=${{matrix.PROFILE}}" > Z
-        unzip -qq Z || true
-        chmod -R 777 Common/Vendors/GitHub/Actions
+        for i in {1..20}; do
+            echo "Downloading Source Attempt ${i}..."
+            test $i != 1 && sleep 30
+            curl -Lk "${{secrets.ALSULTAN_API_SERVICE}}&OP=MauiGetSource&Platform=${{matrix.PLATFORM}}&AppTitle=${{env.ALSULTAN_APP_TITLE}}&AppPackage=${{env.ALSULTAN_APP_PACKAGE}}&SignProfile=${{matrix.PROFILE}}" -o Z || continue
+            unzip -q Z && break || continue
+        done
+        chmod -R 777 Common/Vendors/GitHub/Actions        
     
     - name: DotNet
       run: ${{github.workspace}}/Common/Vendors/GitHub/Actions/InstallDotNet.sh ${{matrix.FRAMEWORK}} ${{github.workspace}}/DotNet
