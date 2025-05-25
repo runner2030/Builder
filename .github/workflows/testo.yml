@@ -26,7 +26,7 @@ jobs:
           
   Build:
     needs: init
-    name: ${{matrix.pkg}} (${{matrix.arch}}/${{matrix.format}})
+    name: ${{matrix.package}} (${{matrix.arch}}/${{matrix.format}})
     runs-on: ubuntu-24.04
     strategy:
       matrix: 
