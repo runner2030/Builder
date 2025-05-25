@@ -58,8 +58,8 @@ jobs:
       run: |
         PKG="$(echo "${{matrix.package}}" | cut -d'/' -f1)"
         ARC="$(echo "${{matrix.package}}" | cut -d'/' -f2)"
-        ./build -x -t debian -a $ARC $PKG || exit
-        ./build -x -t pacman -a $ARC $PKG || exit
+        ./build -b -x -t debian -a $ARC $PKG || exit
+        ./build -b -x -t pacman -a $ARC $PKG || exit
 
     - name: Upload
       run: ./Scripts/Build/Ubuntu/Upload.sh debian && ./Scripts/Build/Ubuntu/Upload.sh debian
