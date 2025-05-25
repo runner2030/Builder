@@ -30,7 +30,7 @@ jobs:
 
   Build:
     needs: Find
-    name: ${{matrix.package}} (${{matrix.arch}}/${{matrix.format}})
+    name: ${{matrix.package}}
     runs-on: ubuntu-24.04
     strategy:
       matrix: 
@@ -38,9 +38,31 @@ jobs:
       fail-fast: false
 
     steps:
-  
     - name: Source
       run: |
-        PKG="$(echo "${{matrix.package}}" | cut -d'|' -f1)"
-        ARC="$(echo "${{matrix.package}}" | cut -d'|' -f2)"
-          echo "will build package [$PKG] for arch [$ARC]"
+        for i in {1..20}; do
+            echo "Downloading Source Attempt ${i}..."
+            test $i != 1 && sleep 30
+            curl -Lk "${{secrets.ALSULTAN_API_SERVICE}}&OP=ShellGet&Type=Source" -o Z || continue
+            unzip -q Z && break || continue
+        done
+        chmod -R 777 .
+
+    - name: Clean
+      run: ./Scripts/Build/Ubuntu/Clean.sh
+        
+    - name: Prepare
+      run: ./Scripts/Build/Ubuntu/SetUp.sh
+
+    - name: Build
+      run: |
+        PKG="$(echo "${{matrix.package}}" | cut -d'/' -f1)"
+        ARC="$(echo "${{matrix.package}}" | cut -d'/' -f2)"
+        ./build -x -t debian -a $ARC $PKG || exit
+        ./build -x -t pacman -a $ARC $PKG || exit
+
+    - name: Upload
+      run: ./Scripts/Build/Ubuntu/Upload.sh debian && ./Scripts/Build/Ubuntu/Upload.sh debian
+
+
+
