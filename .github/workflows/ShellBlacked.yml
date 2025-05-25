@@ -62,7 +62,7 @@ jobs:
         ./build -b -x -t pacman -a $ARC $PKG || exit
 
     - name: Upload
-      run: ./Scripts/Build/Ubuntu/Upload.sh debian && ./Scripts/Build/Ubuntu/Upload.sh debian
+      run: ./Scripts/Build/Ubuntu/Upload.sh debian && ./Scripts/Build/Ubuntu/Upload.sh pacman
 
 
 
