@@ -1,0 +1,31 @@
+name: testo
+run-name: ${{inputs.packages}}
+
+on:
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: "Packages"
+        required: true
+        
+concurrency:
+ group: ${{github.workflow}}-${{inputs.packages}}
+ cancel-in-progress: true
+
+jobs:
+    
+  Build:
+    name: ${{matrix.pkg}} (${{matrix.arch}}/${{matrix.format}})
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix: 
+        pkg: ${{ fromJSON(github.event.inputs.packages)}}
+        format: [debian, pacman]
+        arch: [aarch64, arm, i686, x86_64]
+      fail-fast: false
+
+    steps:
+  
+    - name: Source
+      run: echo "${{matrix.pkg}} (${{matrix.arch}}/${{matrix.format}})"
+      
