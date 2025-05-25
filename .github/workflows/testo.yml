@@ -13,13 +13,24 @@ concurrency:
  cancel-in-progress: true
 
 jobs:
-    
+  init:
+    runs-on: ubuntu-24.04
+    outputs:
+      packages: ${{ steps.generate-matrix.outputs.packages }}
+    steps:
+      - name: generate-matrix
+        id: generate-matrix
+        run: |
+          packages=$(echo '"${{ inputs.packages }}"' | jq -c '. | split(" ") | map(select(length > 0))')
+          echo "packages=$packages" >> $GITHUB_OUTPUT
+          
   Build:
+    needs: init
     name: ${{matrix.pkg}} (${{matrix.arch}}/${{matrix.format}})
     runs-on: ubuntu-24.04
     strategy:
       matrix: 
-        pkg: ${{ fromJSON(github.event.inputs.packages)}}
+        package: ${{ fromJSON(needs.init.outputs.packages)}}
         format: [debian, pacman]
         arch: [aarch64, arm, i686, x86_64]
       fail-fast: false
@@ -27,5 +38,5 @@ jobs:
     steps:
   
     - name: Source
-      run: echo "${{matrix.pkg}} (${{matrix.arch}}/${{matrix.format}})"
+      run: echo "${{matrix.package}} (${{matrix.arch}}/${{matrix.format}})"
       
