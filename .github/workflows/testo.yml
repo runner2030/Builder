@@ -25,12 +25,7 @@ jobs:
           done
           chmod -R 777 .          
           blacked="$(cd Scripts/Others;./FindBlackLists.sh -gh)"
-          echo "${blacked}"
-          echo "==============================="
           packages=$(echo "\"${blacked}\"" | jq -c '. | split(" ") | map(select(length > 0))')
-          echo "${packages}"
-          echo "==============================="
-
           echo "packages=$packages" >> $GITHUB_OUTPUT
 
   Build:
@@ -40,7 +35,6 @@ jobs:
     strategy:
       matrix: 
         package: ${{ fromJSON(needs.Find.outputs.packages)}}
-        format: [debian, pacman]
       fail-fast: false
 
     steps:
