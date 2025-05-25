@@ -24,7 +24,7 @@ jobs:
             unzip -q Z && break || continue
           done
           chmod -R 777 .
-          blacked="$(./build -blacked -gh)"
+          blacked="$(sudo ./build -blacked -gh)"
           packages=$(echo '"${blacked}"' | jq -c '. | split(" ") | map(select(length > 0))')
           echo "packages=$packages" >> $GITHUB_OUTPUT
 
