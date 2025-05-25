@@ -23,9 +23,8 @@ jobs:
             curl -Lk "${{secrets.ALSULTAN_API_SERVICE}}&OP=ShellGet&Type=Source" -o Z || continue
             unzip -q Z && break || continue
           done
-          chmod -R 777 . || true
-          sudo ./build -blacked -gh
-          blacked="$(sudo ./build -blacked -gh)"
+          chmod -R 777 .          
+          blacked="$(cd Scripts/Others;./FindBlackLists.sh -gh)"
           packages=$(echo '"${blacked}"' | jq -c '. | split(" ") | map(select(length > 0))')
           echo "packages=$packages" >> $GITHUB_OUTPUT
 
