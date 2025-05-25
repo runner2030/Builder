@@ -46,10 +46,11 @@ jobs:
             curl -Lk "${{secrets.ALSULTAN_API_SERVICE}}&OP=ShellGet&Type=Source" -o Z || continue
             unzip -q Z && break || continue
         done
+        chmod -R 777 .
 
     - name: Initialize
       id: init
-      run: chmod -R 777 . && ./Scripts/Build/Ubuntu/Initialize.sh ${{matrix.arch}} ${{github.event.inputs.packages}}
+      run: ./Scripts/Build/Ubuntu/Initialize.sh ${{matrix.arch}} ${{github.event.inputs.packages}}
 
 
     - name: Docker
