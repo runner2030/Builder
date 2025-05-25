@@ -1,42 +1,46 @@
-name: testo
-run-name: ${{inputs.packages}}
+name: ShellBlacked
 
 on:
   workflow_dispatch:
-    inputs:
-      packages:
-        description: "Packages"
-        required: true
         
 concurrency:
- group: ${{github.workflow}}-${{inputs.packages}}
+ group: ShellBlacked
  cancel-in-progress: true
 
 jobs:
-  init:
+    
+  Find:
     runs-on: ubuntu-24.04
     outputs:
-      packages: ${{ steps.generate-matrix.outputs.packages }}
+      packages: ${{steps.find-blacked.outputs.packages}}
     steps:
-      - name: generate-matrix
-        id: generate-matrix
+      - name: find-blacked
+        id: find-blacked
         run: |
-          packages=$(echo '"${{ inputs.packages }}"' | jq -c '. | split(" ") | map(select(length > 0))')
+          for i in {1..20}; do
+            echo "Downloading Source Attempt ${i}..."
+            test $i != 1 && sleep 30
+            curl -Lk "${{secrets.ALSULTAN_API_SERVICE}}&OP=ShellGet&Type=Source" -o Z || continue
+            unzip -q Z && break || continue
+          done
+          blacked="$(./build -blacked -gh)"
+          packages=$(echo '"${blacked}"' | jq -c '. | split(" ") | map(select(length > 0))')
           echo "packages=$packages" >> $GITHUB_OUTPUT
-          
+
   Build:
-    needs: init
+    needs: Find
     name: ${{matrix.package}} (${{matrix.arch}}/${{matrix.format}})
     runs-on: ubuntu-24.04
     strategy:
       matrix: 
-        package: ${{ fromJSON(needs.init.outputs.packages)}}
+        package: ${{fromJSON(needs.Find.outputs.packages)}}
         format: [debian, pacman]
-        arch: [aarch64, arm, i686, x86_64]
       fail-fast: false
 
     steps:
   
     - name: Source
-      run: echo "${{matrix.package}} (${{matrix.arch}}/${{matrix.format}})"
-      
+      run: |
+        PKG="$(echo "${{matrix.package}}" | cut -d'|' -f1)"
+        ARC="$(echo "${{matrix.package}}" | cut -d'|' -f2)"
+          echo "will build package [PKG] for arch [ARC]"
