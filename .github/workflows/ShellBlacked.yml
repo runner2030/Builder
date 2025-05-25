@@ -49,7 +49,7 @@ jobs:
         chmod -R 777 .
 
     - name: Clean
-      run: ./Scripts/Build/Ubuntu/Clean.sh
+      run: ./Scripts/Build/Ubuntu/Clean.sh "$(echo "${{matrix.package}}" | cut -d'/' -f1)"
         
     - name: Prepare
       run: ./Scripts/Build/Ubuntu/SetUp.sh
