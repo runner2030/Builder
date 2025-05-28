@@ -39,7 +39,7 @@ jobs:
         
     - name: Prepare
       if: ${{steps.init.outputs.excluded != 'true' }}
-      run: ./Scripts/Build/Ubuntu/SetUp.sh
+      run: ./Scripts/Build/Ubuntu/setup-ubuntu.sh
         
     - name: Build
       if: ${{steps.init.outputs.excluded != 'true' }}
