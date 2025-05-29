@@ -10,7 +10,7 @@ concurrency:
  cancel-in-progress: true
 
 jobs:
-  CreateDocker:
+  Create Docker:
     runs-on: ubuntu-latest
     permissions:
       contents: read
