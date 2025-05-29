@@ -45,7 +45,7 @@ jobs:
         
     - name: Prepare
       if: ${{steps.init.outputs.excluded != 'true' }}
-      run: ./Scripts/Build/Ubuntu/SetUp.sh
+      run: ./Scripts/Build/Ubuntu/SetUp.sh ${{github.event.inputs.packages}}
         
     - name: Build
       if: ${{steps.init.outputs.excluded != 'true' }}
