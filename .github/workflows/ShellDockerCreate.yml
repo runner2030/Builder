@@ -40,8 +40,12 @@ jobs:
     - name: Push
       run: |
         for i in {1..20}; do
-            test docker push "ghcr.io/alsultan/shell-builder:latest" && exit 0 || sleep 30
+            if docker push "ghcr.io/alsultan/shell-builder:latest"; then
+                echo "Docker Imager Pushed Successfully"
+                exit 0
+            else
+                sleep 30
+            fi
         done
         echo "Failure Pushing Docker Imager"
         exit 1
- 
