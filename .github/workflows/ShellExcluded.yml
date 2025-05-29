@@ -1,10 +1,10 @@
-name: ShellBlacked
+name: Shell Excluded
 
 on:
   workflow_dispatch:
         
 concurrency:
- group: ShellBlacked
+ group: ${{github.workflow}}
  cancel-in-progress: true
 
 jobs:
