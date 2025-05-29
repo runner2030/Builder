@@ -1,4 +1,4 @@
-name: Shell
+name: Shell Builder
 run-name: ${{inputs.packages}}
 
 on:
