@@ -44,3 +44,4 @@ jobs:
         done
         echo "Failure Pushing Docker Imager"
         exit 1
+ 
