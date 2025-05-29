@@ -19,21 +19,24 @@ jobs:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        format: [debian, pacman]
         include:
-          - arch: aarch64
+          - format: [debian,pacman]
+            arch: aarch64
             os: ubuntu-24.04-arm
 
-          - arch: arm
+          - format: [debian,pacman]
+            arch: arm
             os: ubuntu-24.04-arm
 
-          - arch: i686
+          - format: [debian,pacman]
+            arch: i686
             os: ubuntu-24.04
   
-          - arch: x86_64
+          - format: [debian,pacman]
+            arch: x86_64
             os: ubuntu-24.04
             
-
+        
       fail-fast: false
       
     steps:
