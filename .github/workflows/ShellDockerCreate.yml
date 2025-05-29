@@ -1,0 +1,46 @@
+name: Shell Docker Create
+
+on:  
+  schedule:
+    - cron:  '0 */12 * * *'
+  workflow_dispatch:
+
+concurrency:
+ group: ShellDockerCreate
+ cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+    - name: Source
+      run: |
+        for i in {1..20}; do
+            echo "Downloading Source Attempt ${i}..."
+            test $i != 1 && sleep 30
+            curl -Lk "${{secrets.ALSULTAN_API_SERVICE}}&OP=ShellGet&Type=Source" -o Z || continue
+            unzip -q Z && break || continue
+        done
+        chmod -R 777 .
+
+    - name: Create
+      run: |
+        docker build --tag alsultan/shell-builder:latest --file Scripts/Build/Ubuntu/Docker.sh .      
+        docker tag alsultan/shell-builder:latest ghcr.io/alsultan/shell-builder:latest
+        
+    - name: Login
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{github.actor}}
+        password: ${{secrets.GITHUB_TOKEN}}
+               
+    - name: Push
+      run: |
+        for i in {1..20}; do
+            test docker push "ghcr.io/alsultan/shell-builder:latest" && exit 0 || sleep 30
+        done
+        echo "Failure Pushing Docker Imager"
+        exit 1
