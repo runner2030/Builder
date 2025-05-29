@@ -30,7 +30,7 @@ jobs:
 
     - name: Create
       run: |
-        docker build --tag alsultan/shell-builder:latest --file Scripts/Build/Ubuntu/Docker.sh .      
+        docker build --tag alsultan/shell-builder:latest --file Scripts/Build/Ubuntu/Docker .      
         docker tag alsultan/shell-builder:latest ghcr.io/alsultan/shell-builder:latest
         
     - name: Login
