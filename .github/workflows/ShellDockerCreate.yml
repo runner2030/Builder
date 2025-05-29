@@ -1,4 +1,4 @@
-name: Shell Docker Create
+name: Shell Docker
 
 on:  
   schedule:
@@ -6,11 +6,11 @@ on:
   workflow_dispatch:
 
 concurrency:
- group: ShellDockerCreate
+ group: ${{github.workflow}}
  cancel-in-progress: true
 
 jobs:
-  update:
+  CreateDocker:
     runs-on: ubuntu-latest
     
     steps:
