@@ -20,23 +20,38 @@ jobs:
     strategy:
       matrix:
         include:
-          - format: [debian,pacman]
+          - format: debian
             arch: aarch64
             os: ubuntu-24.04-arm
 
-          - format: [debian,pacman]
+          - format: debian
             arch: arm
             os: ubuntu-24.04-arm
 
-          - format: [debian,pacman]
+          - format: debian
             arch: i686
             os: ubuntu-24.04
   
-          - format: [debian,pacman]
+          - format: debian
             arch: x86_64
             os: ubuntu-24.04
             
-        
+          - format: pacman
+            arch: aarch64
+            os: ubuntu-24.04-arm
+
+          - format: pacman
+            arch: arm
+            os: ubuntu-24.04-arm
+
+          - format: pacman
+            arch: i686
+            os: ubuntu-24.04
+  
+          - format: pacman
+            arch: x86_64
+            os: ubuntu-24.04
+
       fail-fast: false
       
     steps:
