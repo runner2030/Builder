@@ -1,57 +1,22 @@
-name: Shell Boot
+name: Shell BootStrap
 run-name: ${{inputs.packages}}
 
-on:
+on:  
+  schedule:
+    - cron:  '0 */12 * * *'
   workflow_dispatch:
-    inputs:
-      packages:
-        description: "Packages"
-        required: true
         
 concurrency:
- group: ${{github.workflow}}-${{inputs.packages}}
+ group: ${{github.workflow}}
  cancel-in-progress: true
 
 jobs:
 
-  Build:
-    name: ${{inputs.packages}} (${{matrix.arch}}/${{matrix.format}})
-    runs-on: ${{matrix.os}}
+  BuildBootStrap:
+    runs-on: ubuntu-24.04
     strategy:
-      matrix:
-        include:
-          - format: debian
-            arch: aarch64
-            os: ubuntu-24.04-arm
-
-          - format: debian
-            arch: arm
-            os: ubuntu-24.04-arm
-
-          - format: debian
-            arch: i686
-            os: ubuntu-24.04
-  
-          - format: debian
-            arch: x86_64
-            os: ubuntu-24.04
-            
-          - format: pacman
-            arch: aarch64
-            os: ubuntu-24.04-arm
-
-          - format: pacman
-            arch: arm
-            os: ubuntu-24.04-arm
-
-          - format: pacman
-            arch: i686
-            os: ubuntu-24.04
-  
-          - format: pacman
-            arch: x86_64
-            os: ubuntu-24.04
-
+      matrix: 
+        format: [debian, pacman]
       fail-fast: false
       
     steps:
@@ -66,20 +31,8 @@ jobs:
         done
         chmod -R 777 .
 
-    - name: Initialize
-      id: init
-      run: ./Scripts/Build/Ubuntu/Initialize.sh ${{matrix.arch}} ${{github.event.inputs.packages}}
-
-
-    - name: Docker
-      if: ${{steps.init.outputs.excluded != 'true' }}
-      run: cd Scripts/Build/Docker && ./DockerCreate.sh ${{matrix.arch}}
-        
     - name: Build
-      if: ${{steps.init.outputs.excluded != 'true' }}
-      run: cd Scripts/Build/Docker && ./Build.sh ${{matrix.format}} ${{matrix.arch}} ${{github.event.inputs.packages}}
-    
-    - name: Upload
-      if: ${{steps.init.outputs.excluded != 'true' }}
-      run: ./Scripts/Build/Ubuntu/Upload.sh ${{matrix.format}}
+      id: init
+      run: ./build -boot --pm ${{matrix.format}}
+
        
