@@ -1,4 +1,4 @@
-name: Shell BootStrap
+name: Shell Boot
 run-name: ${{inputs.packages}}
 
 on:  
