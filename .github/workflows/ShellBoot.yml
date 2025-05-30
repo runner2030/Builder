@@ -12,11 +12,11 @@ concurrency:
 
 jobs:
 
-  BuildBootStrap:
+  Boot:
     runs-on: ubuntu-24.04
     strategy:
       matrix: 
-        format: [debian, pacman]
+        pm: [apt, pacman]
       fail-fast: false
       
     steps:
@@ -33,6 +33,6 @@ jobs:
 
     - name: Build
       id: init
-      run: ./build -boot --pm ${{matrix.format}}
+      run: ./Scripts/Build/Boot/BootStrap.sh --pm ${{matrix.pm}}
 
        
