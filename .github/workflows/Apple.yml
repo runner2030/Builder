@@ -46,3 +46,4 @@ jobs:
       run: ${{github.workspace}}/Common/Vendors/GitHub/Actions/PublishMauiApple.sh ${{matrix.PLATFORM}}
 
             
+ 
